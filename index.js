@@ -1,4 +1,15 @@
 var deployd = require('deployd');
+var s3 = require('dpd-s3');
+var fs = require('fs');
+
+var s3conf = {
+    "type": "S3Bucket",
+    "bucket": process.env.S3_BUCKET,
+    "key": process.env.S3_KEY,
+    "secret": process.env.S3_SECRET,
+    "region": process.env.S3_REGION,
+    "publicRead": true
+};
 
 var server = deployd({
   port: process.env.PORT || 5000,
@@ -14,15 +25,17 @@ var server = deployd({
   }
 });
 
-server.listen();
+fs.writeFile("resources/bucket/config.json", JSON.stringify(s3conf), function() {
+	server.listen();
 
-server.on('listening', function() {
-  console.log("Server is listening");
-});
+	server.on('listening', function() {
+	  console.log("Server is listening");
+	});
 
-server.on('error', function(err) {
-  console.error(err);
-  process.nextTick(function() { 
-    process.exit();
-  });
-});
+	server.on('error', function(err) {
+	  console.error(err);
+	  process.nextTick(function() { 
+	    process.exit();
+	  });
+	});
+}); 

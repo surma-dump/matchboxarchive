@@ -1,4 +1,5 @@
 .dpd
 node_modules
 data
+resources/bucket/config.json
 

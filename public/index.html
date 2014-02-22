@@ -1,12 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<script type="text/javascript" src="dpd.js"></script>
-</head>
-<body>
-	<h1>Welcome to Deployd!</h1>
-	<p>You've just created a Deployd app. You can add front-end files in the <code>public</code> folder.</p>
-	<p>If you're new to Deployd, have a look at the <a href="http://docs.deployd.com/docs/getting-started/what-is-deployd.md">Getting Started Guide</a> or <a href="http://docs.deployd.com/docs/getting-started/your-first-api.md">Hello World Tutorial<a>.</p>
-</body>
-</html>
+<div id="feedback">
+	Errors be here
+</div>
+<div id="status">
+Login status:
+	<div id="statustxt"></div>
+	<button id="statusbtn">Status</button>
+</div>
+<div id="login">
+	<label>Username:</label>
+	<input type="text" id="username">
+	<label>Password:</label>
+	<input type="password" id="password">
+	<button id="loginbtn">Login</button>
+</div>
+
+<div id="upload">
+	<input type="file" id="files">
+	<button id="uploadbtn">Upload</button>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+	(function() {
+		var feedback = function(str) {
+			document.getElementById('feedback').innerHTML = str;	
+		};
+
+		document.getElementById('loginbtn').addEventListener('click', function() {
+			var data = {
+				username: document.getElementById('username').value,
+				password: document.getElementById('password').value
+			};
+
+			$.ajax('/users/login', {
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(data),
+				success: function() {
+					feedback('Logged in!');
+				},
+				error: function(e) {
+					feedback('Login failed!' + JSON.stringify(e));
+				}
+			});
+		});
+
+		document.getElementById('statusbtn').addEventListener('click', function() {
+			$.ajax('/users/me', {
+				type: 'GET',
+				success: function(data) {
+					document.getElementById('statustxt').innerHTML = JSON.stringify(data);
+				}	
+			});
+		});
+
+		document.getElementById('uploadbtn').addEventListener('click', function() {
+			var file = document.getElementById('files').files[0];
+			file.newname = new Date().toISOString() + '_' + file.name;
+			console.log('Uploading: ', file.newname);
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', '/bucket/'+file.newname, true);
+			xhr.onload = function(e) {
+				console.log(e);	
+			}
+			xhr.send(file);
+		});
+	})();
+</script>
