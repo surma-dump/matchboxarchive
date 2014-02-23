@@ -1,5 +1,5 @@
-var app = angular.module('matchboxarchive', []);
-app.factory('userService', ['$http', '$q', function($http, $q) {
+angular.module('matchboxarchive', ['ngRoute', 'ngSanitize'])
+.factory('userService', ['$http', '$q', function($http, $q) {
 	var userService = {
 		isLoggedIn: false,
 		login: function(username, password) {
@@ -39,8 +39,30 @@ app.factory('userService', ['$http', '$q', function($http, $q) {
 	}.bind(this));
 
 	return userService;
-}]);
-app.controller('loginctrl', ['$scope', 'userService', function($scope, userService) {
+}])
+.config(['$routeProvider', function($routeProvider) {
+	$routeProvider
+	.when('/', {
+		template: ''
+	})
+	.when('/details/:id', {
+		templateUrl: 'partials/details.html',
+		controller: 'detailsctrl'
+	})
+	.when('/login', {
+		templateUrl: 'partials/login.html',
+		controller: 'loginctrl'
+	})
+	.when('/upload', {
+		templateUrl: 'partials/upload.html',
+		controller: 'uploadctrl'
+	})
+	.otherwise({
+		redirectTo: '/'
+	})
+}])
+.controller('loginctrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+	$scope.location = $location;
 	$scope.isLoggedIn = function() {
 		return userService.isLoggedIn;
 	};
@@ -50,4 +72,85 @@ app.controller('loginctrl', ['$scope', 'userService', function($scope, userServi
 	$scope.logout = function() {
 		userService.logout();
 	}
-}]);
+}])
+.controller('uploadctrl', ['$scope', '$sce', 'rolloutService', 'formFieldBuilder', 'metadataSpec', function($scope, $sce, rolloutService, formFieldBuilder, metadataSpec){
+	rolloutService.rollOut();
+	$scope.metadataSpec = metadataSpec;
+	$scope.parse = function(spec) {
+		return $sce.trustAsHtml(formFieldBuilder.buildFormField(spec));
+	};
+}])
+.value('metadataSpec', [
+	{
+		field: 'width',
+		description: 'Width',
+		type: 'float'
+	},
+	{
+		field: 'height',
+		description: 'Height',
+		type: 'float'
+	},
+	{
+		field: 'depth',
+		description: 'Depth',
+		type: 'float',
+	},
+	{
+		field: 'colors',
+		description: 'Colors',
+		type: 'tags'
+	},
+	{
+		field: 'tags',
+		description: 'Tags',
+		type: 'tags',
+	},
+	{
+		field: 'yearStart',
+		description: 'Earliest year',
+		type: 'float'
+	},
+	{
+		field: 'yearEnd',
+		description: 'Latest year',
+		type: 'float'
+	},
+	{
+		field: 'country',
+		description: 'Country',
+		type: 'string'
+	}
+])
+.factory('formFieldBuilder', ['$compile', function($compile) {
+	return {
+		buildFormField: function(spec) {
+			var r = ""
+			switch(spec.type) {
+				case 'string':
+					r = '<input type="text" ng-model="'+spec.field+'">';
+					break;
+				case 'float':
+					r = '<input type="number" ng-model="metadata.'+spec.field+'">';
+					break;
+				case 'bool':
+					r = '<input type="checkbox" ng-model="metadata.'+spec.field+'">';
+					break;
+				default:
+					console.log(spec.type, 'not implemented');
+			}
+			return r;
+		}
+	}
+}])
+.factory('rolloutService', [function() {
+	var drawer = document.getElementById('drawer');
+	return {
+		rollOut: function() {
+			drawer.className = 'show';
+		},
+		rollIn: function() {
+			drawer.className = '';
+		}
+	}
+}])

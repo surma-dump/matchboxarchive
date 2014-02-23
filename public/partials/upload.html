@@ -1,0 +1,17 @@
+<form id="upload">
+	<div>
+		<label>Pictures:</label>
+		<input type="file" multiple>
+	</div>
+	<div>
+		<label>Visible:</label>
+		<input type="checkbox">
+	</div>
+	-- {{metadata.country}} --
+	<div ng-repeat="spec in metadataSpec">
+		<label>{{spec.description}}</label>
+		-- {{metadata.country}} --
+		<div ng-bind-html="parse(spec)"></div>
+	</div>
+
+</form>

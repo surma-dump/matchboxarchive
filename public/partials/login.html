@@ -1,0 +1,13 @@
+<form ng-show="!isLoggedIn()">
+	<div>
+		Username: <input type="text" ng-model="username">
+	</div>
+	<div>
+		Password: <input type="password" ng-model="password">
+	</div>
+	<button ng-click="login()">Login</button>
+</form>
+<div ng-show="isLoggedIn()">
+<button ng-click="location.path('/upload')">Upload</button>
+<button ng-click="logout()">Logout</button>
+</button>

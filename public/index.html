@@ -9,24 +9,16 @@
 	<body ng-app="matchboxarchive">
 		<div id="drawer">
 			<button id="rollin">Roll</button>
+			<div ng-view>
+			</div>
 		</div>
 		<div id="sidebar">
 		</div>
 		<button id="rollout">Roll</button>
-		<div ng-controller="loginctrl">
-			<form ng-show="!isLoggedIn()">
-				<div>
-					Username: <input type="text" ng-model="username">
-				</div>
-				<div>
-					Password: <input type="password" ng-model="password">
-				</div>
-				<button ng-click="login()">Login</button>
-			</form>
-			<button ng-show="isLoggedIn()" ng-click="logout()">Logout</button>
-		</div>
 
-		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
+		<script src="/js/vendor/angular.min.js"></script>
+		<script src="/js/vendor/angular-route.min.js"></script>
+		<script src="/js/vendor/angular-sanitize.min.js"></script>
 		<script src="/js/main.js"></script>
 		<script>
 			document.getElementById('rollout').addEventListener('click', function() {

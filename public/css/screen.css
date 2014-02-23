@@ -2,6 +2,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
 /* line 17, ../../../../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -67,21 +68,30 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
-/* line 12, ../sass/screen.scss */
+/* line 21, ../sass/screen.scss */
 * {
   box-sizing: border-box;
 }
 
-/* line 16, ../sass/screen.scss */
+/* line 35, ../sass/screen.scss */
+html {
+  background-color: black;
+  font-family: 'PT Sans', sans-serif;
+  font-weight: 400;
+  color: white;
+}
+
+/* line 41, ../sass/screen.scss */
 #sidebar, #drawer {
   position: fixed;
   top: 0;
   height: 100%;
   width: 480px;
   z-index: 400;
+  background: #322c2b;
 }
 
-/* line 24, ../sass/screen.scss */
+/* line 50, ../sass/screen.scss */
 #sidebar {
   left: 0;
   border-right-width: 3px;
@@ -101,7 +111,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   transition-timing-function: ease-in-out;
 }
 
-/* line 34, ../sass/screen.scss */
+/* line 60, ../sass/screen.scss */
 #drawer {
   left: -120px;
   -webkit-transition-property: left;
@@ -117,16 +127,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 39, ../sass/screen.scss */
+/* line 65, ../sass/screen.scss */
 #drawer.show {
   left: 480px;
 }
-/* line 41, ../sass/screen.scss */
+/* line 67, ../sass/screen.scss */
 #drawer.show + #sidebar {
-  border-right-color: red;
+  border-right-color: #ff4119;
 }
 
-/* line 47, ../sass/screen.scss */
+/* line 73, ../sass/screen.scss */
 body {
   margin-left: 480px;
 }
