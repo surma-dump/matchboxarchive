@@ -1,0 +1,49 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "compass/css3/transition";
+
+$sidebar-width: 480px;
+$drawer-width: 600px;
+
+* {
+	box-sizing: border-box;
+}
+
+#sidebar, #drawer {
+	position: fixed;
+	top: 0;
+	height: 100%;
+	width: $sidebar-width;
+	z-index: 400;
+}
+
+#sidebar {
+	left: 0;
+	border-right-width: 3px;
+	border-right-style: solid;
+	border-right-color: rgba(0, 0, 0, 0);
+	@include transition-property(left, border-right-color, border-right-style);
+	@include transition-duration(1s);
+	@include transition-timing-function(ease-in-out);
+}
+
+#drawer {
+	left: $sidebar-width - $drawer-width;
+	@include transition-property(left);
+	@include transition-duration(1s);
+	@include transition-timing-function(ease-in-out);
+	&.show {
+		left: $sidebar-width;
+		+ #sidebar {
+			border-right-color: red;
+		}
+	}
+}
+
+body {
+	margin-left: $sidebar-width;
+}

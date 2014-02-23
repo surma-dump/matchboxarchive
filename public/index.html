@@ -1,69 +1,39 @@
-<div id="feedback">
-	Errors be here
-</div>
-<div id="status">
-Login status:
-	<div id="statustxt"></div>
-	<button id="statusbtn">Status</button>
-</div>
-<div id="login">
-	<label>Username:</label>
-	<input type="text" id="username">
-	<label>Password:</label>
-	<input type="password" id="password">
-	<button id="loginbtn">Login</button>
-</div>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" href="css/screen.css">
+	</head>
+	<body ng-app="matchboxarchive">
+		<div id="drawer">
+			<button id="rollin">Roll</button>
+		</div>
+		<div id="sidebar">
+		</div>
+		<button id="rollout">Roll</button>
+		<div ng-controller="loginctrl">
+			<form ng-show="!isLoggedIn()">
+				<div>
+					Username: <input type="text" ng-model="username">
+				</div>
+				<div>
+					Password: <input type="password" ng-model="password">
+				</div>
+				<button ng-click="login()">Login</button>
+			</form>
+			<button ng-show="isLoggedIn()" ng-click="logout()">Logout</button>
+		</div>
 
-<div id="upload">
-	<input type="file" id="files">
-	<button id="uploadbtn">Upload</button>
-</div>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script>
-	(function() {
-		var feedback = function(str) {
-			document.getElementById('feedback').innerHTML = str;	
-		};
-
-		document.getElementById('loginbtn').addEventListener('click', function() {
-			var data = {
-				username: document.getElementById('username').value,
-				password: document.getElementById('password').value
-			};
-
-			$.ajax('/users/login', {
-				type: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify(data),
-				success: function() {
-					feedback('Logged in!');
-				},
-				error: function(e) {
-					feedback('Login failed!' + JSON.stringify(e));
-				}
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
+		<script src="/js/main.js"></script>
+		<script>
+			document.getElementById('rollout').addEventListener('click', function() {
+				document.getElementById('drawer').className = 'show';
 			});
-		});
-
-		document.getElementById('statusbtn').addEventListener('click', function() {
-			$.ajax('/users/me', {
-				type: 'GET',
-				success: function(data) {
-					document.getElementById('statustxt').innerHTML = JSON.stringify(data);
-				}	
+			document.getElementById('rollin').addEventListener('click', function() {
+				document.getElementById('drawer').className = '';
 			});
-		});
-
-		document.getElementById('uploadbtn').addEventListener('click', function() {
-			var file = document.getElementById('files').files[0];
-			file.newname = new Date().toISOString() + '_' + file.name;
-			console.log('Uploading: ', file.newname);
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', '/bucket/'+file.newname, true);
-			xhr.onload = function(e) {
-				console.log(e);	
-			}
-			xhr.send(file);
-		});
-	})();
-</script>
+		</script>
+	</body>
+</html>
