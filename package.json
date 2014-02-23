@@ -18,6 +18,6 @@
   "homepage": "https://github.com/surma-dump/matchboxarchive",
   "dependencies": {
     "dpd-s3": "^0.1.0",
-    "deployd": "^0.6.10"
+    "deployd": "git://github.com/deployd/deployd.git#18c6ed282c2539e9c0da16c2b4e6e3d8762eed06"
   }
 }
