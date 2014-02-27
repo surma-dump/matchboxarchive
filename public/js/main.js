@@ -1,4 +1,4 @@
-angular.module('matchboxarchive', ['ngRoute', 'ngSanitize'])
+angular.module('matchboxarchive', ['ngRoute'])
 .factory('userService', ['$http', '$q', function($http, $q) {
 	var userService = {
 		isLoggedIn: false,
@@ -26,18 +26,23 @@ angular.module('matchboxarchive', ['ngRoute', 'ngSanitize'])
 				return true;
 			}.bind(this));
 		},
+		refreshState: function() {
+			return $http({
+				url: '/users/me',
+				method: 'GET'
+			})
+			.then(function(data) {
+				if(data.status == 200) {
+					userService.isLoggedIn = true;
+				} else {
+					userService.isLoggedIn = false;
+				}
+				return userService.isLoggedIn
+			});
+		}
 	};
 
-	$http({
-		url: '/users/me',
-		method: 'GET'
-	})
-	.then(function(data) {
-		if(data.status == 200) {
-			userService.isLoggedIn = true;
-		} 
-	}.bind(this));
-
+	userService.refreshState();
 	return userService;
 }])
 .config(['$routeProvider', function($routeProvider) {
@@ -61,7 +66,8 @@ angular.module('matchboxarchive', ['ngRoute', 'ngSanitize'])
 		redirectTo: '/'
 	})
 }])
-.controller('loginctrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+.controller('loginctrl', ['$scope', '$location', 'userService', 'rolloutService', function($scope, $location, userService, rolloutService) {
+	rolloutService.rollOut();
 	$scope.location = $location;
 	$scope.isLoggedIn = function() {
 		return userService.isLoggedIn;
@@ -73,73 +79,59 @@ angular.module('matchboxarchive', ['ngRoute', 'ngSanitize'])
 		userService.logout();
 	}
 }])
-.controller('uploadctrl', ['$scope', '$sce', 'rolloutService', 'formFieldBuilder', 'metadataSpec', function($scope, $sce, rolloutService, formFieldBuilder, metadataSpec){
+.controller('uploadctrl', ['$scope', '$location', '$q', 'userService', 'rolloutService', 'CONFIG', function($scope, $location, $q, userService, rolloutService, CONFIG){
 	rolloutService.rollOut();
-	$scope.metadataSpec = metadataSpec;
-	$scope.parse = function(spec) {
-		return $sce.trustAsHtml(formFieldBuilder.buildFormField(spec));
+	userService.refreshState().then(function(isLoggedIn) {
+		if(!isLoggedIn) {
+			$location.path('/login');
+		}
+	});
+	$scope.deferredUpload = $q.defer()
+	$scope.deferredUpload.resolve();
+	$scope.metadata = {};
+	$scope.files = [];
+	$scope.unprocessedFiles = []
+	$scope.uploading = false;
+	$scope.selectedFilesChanged = function(input) {
+		$scope.selectedFiles = input.files;
 	};
-}])
-.value('metadataSpec', [
-	{
-		field: 'width',
-		description: 'Width',
-		type: 'float'
-	},
-	{
-		field: 'height',
-		description: 'Height',
-		type: 'float'
-	},
-	{
-		field: 'depth',
-		description: 'Depth',
-		type: 'float',
-	},
-	{
-		field: 'colors',
-		description: 'Colors',
-		type: 'tags'
-	},
-	{
-		field: 'tags',
-		description: 'Tags',
-		type: 'tags',
-	},
-	{
-		field: 'yearStart',
-		description: 'Earliest year',
-		type: 'float'
-	},
-	{
-		field: 'yearEnd',
-		description: 'Latest year',
-		type: 'float'
-	},
-	{
-		field: 'country',
-		description: 'Country',
-		type: 'string'
-	}
-])
-.factory('formFieldBuilder', ['$compile', function($compile) {
-	return {
-		buildFormField: function(spec) {
-			var r = ""
-			switch(spec.type) {
-				case 'string':
-					r = '<input type="text" ng-model="'+spec.field+'">';
-					break;
-				case 'float':
-					r = '<input type="number" ng-model="metadata.'+spec.field+'">';
-					break;
-				case 'bool':
-					r = '<input type="checkbox" ng-model="metadata.'+spec.field+'">';
-					break;
-				default:
-					console.log(spec.type, 'not implemented');
+
+	var upload = function() {
+		$scope.uploading = true;
+		var file = $scope.unprocessedFiles[0];
+		$scope.unprocessedFiles = $scope.unprocessedFiles.slice(1);
+
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', CONFIG.s3Endpoint+file.remoteName, true);
+		xhr.upload.addEventListener('progress', function(ev) {
+			file.status = 'Uploading...';
+			$scope.$apply();
+		}, false);
+		xhr.addEventListener('load', function(ev) {
+			file.status = 'Done';
+			$scope.$apply();
+			if($scope.unprocessedFiles.length == 0) {
+				$scope.uploading = false;
+				return;
 			}
-			return r;
+			upload();
+		})
+		xhr.send(file.file);
+	};
+
+	$scope.addFiles = function(selectedFiles) {
+		for(var i = 0; i < selectedFiles.length; i++) {
+			var selectedFile = selectedFiles[i];
+			var file = {
+				file: selectedFile,
+				remoteName: new Date().toISOString(),
+				status: "0%",
+			};
+			$scope.files.push(file);
+			$scope.unprocessedFiles.push(file);
+			if(!$scope.uploading) {
+				upload();
+			}
 		}
 	}
 }])
@@ -154,3 +146,6 @@ angular.module('matchboxarchive', ['ngRoute', 'ngSanitize'])
 		}
 	}
 }])
+.value('CONFIG', {
+	s3Endpoint: '/bucket/',
+})
