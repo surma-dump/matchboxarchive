@@ -86,11 +86,12 @@ angular.module('matchboxarchive', ['ngRoute'])
 			$location.path('/login');
 		}
 	});
-	$scope.deferredUpload = $q.defer()
-	$scope.deferredUpload.resolve();
-	$scope.metadata = {};
+	$scope.doc = {
+		images: [],
+		metadata: {}
+	};
 	$scope.files = [];
-	$scope.unprocessedFiles = []
+	$scope.unprocessedFiles = [];
 	$scope.uploading = false;
 	$scope.selectedFilesChanged = function(input) {
 		$scope.selectedFiles = input.files;
@@ -104,11 +105,11 @@ angular.module('matchboxarchive', ['ngRoute'])
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', CONFIG.s3Endpoint+file.remoteName, true);
 		xhr.upload.addEventListener('progress', function(ev) {
-			file.status = 'Uploading...';
+			file.status = 'uploading';
 			$scope.$apply();
 		}, false);
 		xhr.addEventListener('load', function(ev) {
-			file.status = 'Done';
+			file.status = 'done';
 			$scope.$apply();
 			if($scope.unprocessedFiles.length == 0) {
 				$scope.uploading = false;
@@ -122,13 +123,18 @@ angular.module('matchboxarchive', ['ngRoute'])
 	$scope.addFiles = function(selectedFiles) {
 		for(var i = 0; i < selectedFiles.length; i++) {
 			var selectedFile = selectedFiles[i];
+			var ext = selectedFile.name.substr(selectedFile.name.lastIndexOf('.') + 1);
 			var file = {
 				file: selectedFile,
-				remoteName: new Date().toISOString(),
-				status: "0%",
+				remoteName: new Date().toISOString() + Math.random().toString(36).substring(2,7) + '.' + ext,
+				status: 'waiting',
 			};
-			$scope.files.push(file);
 			$scope.unprocessedFiles.push(file);
+			$scope.files.push(file);
+			$scope.doc.images.push({name: file.remoteName});
+			if(!$scope.doc.mainImage) {
+				$scope.doc.mainImage = $scope.doc.images[0].name;
+			}
 			if(!$scope.uploading) {
 				upload();
 			}

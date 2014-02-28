@@ -83,6 +83,7 @@ html {
 
 /* line 41, ../sass/screen.scss */
 #sidebar, #drawer {
+  padding: 10px;
   position: fixed;
   top: 0;
   height: 100%;
@@ -91,7 +92,7 @@ html {
   background: #322c2b;
 }
 
-/* line 50, ../sass/screen.scss */
+/* line 51, ../sass/screen.scss */
 #sidebar {
   left: 0;
   border-right-width: 3px;
@@ -111,7 +112,7 @@ html {
   transition-timing-function: ease-in-out;
 }
 
-/* line 60, ../sass/screen.scss */
+/* line 61, ../sass/screen.scss */
 #drawer {
   left: -120px;
   -webkit-transition-property: left;
@@ -127,16 +128,42 @@ html {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 65, ../sass/screen.scss */
+/* line 66, ../sass/screen.scss */
 #drawer.show {
   left: 480px;
 }
-/* line 67, ../sass/screen.scss */
+/* line 68, ../sass/screen.scss */
 #drawer.show + #sidebar {
   border-right-color: #ff4119;
 }
 
-/* line 73, ../sass/screen.scss */
+/* line 74, ../sass/screen.scss */
 body {
   margin-left: 480px;
+}
+
+/* line 78, ../sass/screen.scss */
+label {
+  display: block;
+  margin: 5px 0px;
+}
+
+/* line 83, ../sass/screen.scss */
+label.image {
+  display: inline-block;
+}
+/* line 85, ../sass/screen.scss */
+label.image input[type=radio] {
+  display: none;
+}
+/* line 87, ../sass/screen.scss */
+label.image input[type=radio] ~ img.thumb {
+  box-sizing: content-box;
+  max-width: 120px;
+  max-height: 120px;
+  border: 3px solid transparent;
+}
+/* line 93, ../sass/screen.scss */
+label.image input[type=radio]:checked ~ img.thumb {
+  border: 3px solid #ff4119;
 }

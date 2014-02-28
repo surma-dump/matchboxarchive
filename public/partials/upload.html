@@ -1,15 +1,22 @@
 <form id="upload">
 	<div>
-		<label>Pictures:</label>
-		<input type="file" onchange="angular.element(this).scope().selectedFilesChanged(this)" multiple><button ng-click="addFiles(selectedFiles)">Upload</button>
-		<ul>
-			<li ng-repeat="file in files">{{file.file.name}} ({{file.status}})</li>
-		</ul>
+		<label>
+			<input type="file" onchange="angular.element(this).scope().selectedFilesChanged(this)" multiple>
+			<button ng-click="addFiles(selectedFiles)">Upload</button>
+		</label>
+		<label class="image" ng-repeat="file in files">
+			<input type="radio" ng-model="doc.mainImage" name="mainImage" value="{{file.remoteName}}">
+			<img src="/bucket/{{file.remoteName}}?{{file.status}}" class="thumb" ng-show="file.status == 'done'">
+			<img src="http://placehold.it/120x120&text=Uploading..." ng-hide="file.status == 'done'">
+		</label>
 	</div>
 	<div>
-		<label>Visible:</label>
-		<input type="checkbox">
+		<label>
+			<input type="checkbox" ng-model="doc.public">
+			Publicly visible
+		</label>
+		<label>
+			<input type="text" ng-model="doc.meta.country" placeholder="Country">
+		</label>
 	</div>
-
-
 </form>
