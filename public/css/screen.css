@@ -196,3 +196,14 @@ label.image input[type=radio]:checked ~ img.thumb {
   height: 120px;
   background-color: #ff4119;
 }
+
+/* line 123, ../sass/screen.scss */
+.close {
+  display: block;
+  position: absolute;
+  left: calc(100% - 20px);
+  top: 0;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}

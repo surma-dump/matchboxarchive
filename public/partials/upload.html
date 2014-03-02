@@ -4,7 +4,7 @@
 		<button ng-click="addFiles(selectedFiles)">Upload</button>
 	</label>
 	<label class="image" ng-repeat="img in doc.images">
-		<input type="radio" ng-model="doc.mainImage" name="mainImage" value="	{{img.id}}">
+		<input type="radio" ng-model="doc.mainImage" name="mainImage" value="{{img.id}}">
 		<img ng-src="/bucket/{{img.id}}" class="thumb">
 	</label>
 	<div ng-show="unprocessedFiles">

@@ -207,9 +207,10 @@ angular.module('matchboxarchive', ['ngRoute'])
 		})
 	}
 }])
-.controller('searchctrl', ['CONFIG', function(CONFIG) {
+.controller('searchctrl', ['$scope', 'rolloutService', 'CONFIG', function($scope, rolloutService, CONFIG) {
 	$scope.results = [];
 	$scope.loading = false;
+	$scope.rolloutService = rolloutService;
 }])
 .factory('rolloutService', [function() {
 	var drawer = document.getElementById('drawer');
@@ -225,4 +226,6 @@ angular.module('matchboxarchive', ['ngRoute'])
 .value('CONFIG', {
 	s3Endpoint: '/bucket/',
 	infiniteScrollLoad: 20,
-})
+});
+
+angular.bootstrap(document, ['matchboxarchive']);
