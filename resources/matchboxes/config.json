@@ -9,36 +9,36 @@
 			"id": "visible",
 			"order": 0
 		},
-		"pictures": {
-			"name": "pictures",
+		"images": {
+			"name": "images",
 			"type": "array",
 			"typeLabel": "array",
 			"required": true,
-			"id": "pictures",
+			"id": "images",
 			"order": 1
 		},
-		"mainPicture": {
-			"name": "mainPicture",
+		"mainImage": {
+			"name": "mainImage",
 			"type": "string",
 			"typeLabel": "string",
 			"required": true,
-			"id": "mainPicture",
+			"id": "mainImage",
 			"order": 2
 		},
-		"meta": {
-			"name": "meta",
+		"metadata": {
+			"name": "metadata",
 			"type": "object",
 			"typeLabel": "object",
 			"required": false,
-			"id": "meta",
+			"id": "metadata",
 			"order": 3
 		},
-		"privateMeta": {
-			"name": "privateMeta",
+		"privateMetadata": {
+			"name": "privateMetadata",
 			"type": "object",
 			"typeLabel": "object",
 			"required": false,
-			"id": "privateMeta",
+			"id": "privateMetadata",
 			"order": 4
 		}
 	}

@@ -6,26 +6,68 @@
 		<link rel="stylesheet" href="css/screen.css">
 		<title>Striking Matchbox Archive</title>
 	</head>
-	<body ng-app="matchboxarchive">
-		<div id="drawer">
-			<button id="rollin">Roll</button>
-			<div ng-view>
-			</div>
+	<body ng-controller="searchctrl">
+		<div id="drawer" ng-view>
 		</div>
 		<div id="sidebar">
 		</div>
-		<button id="rollout">Roll</button>
+		<div id="result">
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+			<div class="thing"></div>
+		</div>
 
 		<script src="/js/vendor/angular.min.js"></script>
 		<script src="/js/vendor/angular-route.min.js"></script>
 		<script src="/js/main.js"></script>
-		<script>
-			document.getElementById('rollout').addEventListener('click', function() {
-				document.getElementById('drawer').className = 'show';
-			});
-			document.getElementById('rollin').addEventListener('click', function() {
-				document.getElementById('drawer').className = '';
-			});
-		</script>
 	</body>
 </html>

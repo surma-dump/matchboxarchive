@@ -2,10 +2,10 @@ if(!this.hasOwnProperty('visible')) {
     this.visible = false;
 }
 
-var validPicture = false;
-for(var i in this.pictures) {
-    validPicture = validPicture || (this.pictures[i].id == this.mainPicture);
+var validMainImage = false;
+for(var i in this.images) {
+    validMainImage = validMainImage || (this.images[i].id == this.mainImage);
 }
-if(!validPicture) {
-    error('mainPicture', 'No such key found in pictures');
+if(!validMainImage) {
+    error('mainImage', 'No such key found in images');
 }

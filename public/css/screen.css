@@ -138,32 +138,61 @@ html {
 }
 
 /* line 74, ../sass/screen.scss */
+#result {
+  padding: 10px;
+}
+
+/* line 78, ../sass/screen.scss */
 body {
   margin-left: 480px;
 }
 
-/* line 78, ../sass/screen.scss */
+/* line 82, ../sass/screen.scss */
 label {
   display: block;
   margin: 5px 0px;
 }
 
-/* line 83, ../sass/screen.scss */
+/* line 87, ../sass/screen.scss */
 label.image {
   display: inline-block;
 }
-/* line 85, ../sass/screen.scss */
+/* line 89, ../sass/screen.scss */
 label.image input[type=radio] {
   display: none;
 }
-/* line 87, ../sass/screen.scss */
+/* line 91, ../sass/screen.scss */
 label.image input[type=radio] ~ img.thumb {
   box-sizing: content-box;
   max-width: 120px;
   max-height: 120px;
   border: 3px solid transparent;
 }
-/* line 93, ../sass/screen.scss */
+/* line 97, ../sass/screen.scss */
 label.image input[type=radio]:checked ~ img.thumb {
   border: 3px solid #ff4119;
+}
+
+/* line 103, ../sass/screen.scss */
+.message {
+  background-color: #4b4b4b;
+  border: 3px solid transparent;
+  margin: 5px 0;
+  padding: 5px;
+}
+/* line 108, ../sass/screen.scss */
+.message.success {
+  border-color: green;
+}
+/* line 111, ../sass/screen.scss */
+.message.error {
+  border-color: #ff4119;
+}
+
+/* line 116, ../sass/screen.scss */
+.thing {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  background-color: #ff4119;
 }

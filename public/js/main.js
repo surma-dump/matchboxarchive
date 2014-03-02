@@ -1,4 +1,20 @@
 angular.module('matchboxarchive', ['ngRoute'])
+.factory('helper', [function() {
+	return {
+		httpPromiseResolver: function(data) {
+			if(data.status == 200) {
+				return {
+					error: false,
+					data: data.data
+				};
+			}
+			return {
+				error: true,
+				data: data.data
+			}
+		}
+		}
+}])
 .factory('userService', ['$http', '$q', function($http, $q) {
 	var userService = {
 		isLoggedIn: false,
@@ -45,6 +61,42 @@ angular.module('matchboxarchive', ['ngRoute'])
 	userService.refreshState();
 	return userService;
 }])
+.factory('matchboxService', ['$http', '$q', 'helper', function($http, $q, helper) {
+	return {
+		save: function(doc) {
+			if(doc.id) {
+				return this.update(doc.id, doc);
+			}
+			return this.create(doc);
+		},
+		create: function(doc) {
+			return $http({
+				url: '/matchboxes',
+				method: 'POST',
+				data: doc,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(helper.httpPromiseResolver);
+		},
+		update: function(id, doc) {
+			return $http({
+				url: '/matchboxes/'+id,
+				method: 'PUT',
+				data: doc,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(helper.httpPromiseResolver);
+		},
+		get: function(id) {
+			return $http({
+				url: '/matchboxes/'+id,
+				method: 'GET',
+			}).then(helper.httpPromiseResolver);
+		}
+	} 
+}])
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider
 	.when('/', {
@@ -79,18 +131,19 @@ angular.module('matchboxarchive', ['ngRoute'])
 		userService.logout();
 	}
 }])
-.controller('uploadctrl', ['$scope', '$location', '$q', 'userService', 'rolloutService', 'CONFIG', function($scope, $location, $q, userService, rolloutService, CONFIG){
+.controller('uploadctrl', ['$scope', '$location', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $q, userService, matchboxService, rolloutService, CONFIG){
 	rolloutService.rollOut();
 	userService.refreshState().then(function(isLoggedIn) {
 		if(!isLoggedIn) {
 			$location.path('/login');
 		}
 	});
+	$scope.msg = {};
+
 	$scope.doc = {
 		images: [],
 		metadata: {}
 	};
-	$scope.files = [];
 	$scope.unprocessedFiles = [];
 	$scope.uploading = false;
 	$scope.selectedFilesChanged = function(input) {
@@ -100,7 +153,6 @@ angular.module('matchboxarchive', ['ngRoute'])
 	var upload = function() {
 		$scope.uploading = true;
 		var file = $scope.unprocessedFiles[0];
-		$scope.unprocessedFiles = $scope.unprocessedFiles.slice(1);
 
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', CONFIG.s3Endpoint+file.remoteName, true);
@@ -110,6 +162,11 @@ angular.module('matchboxarchive', ['ngRoute'])
 		}, false);
 		xhr.addEventListener('load', function(ev) {
 			file.status = 'done';
+			$scope.doc.images.push({id: file.remoteName});
+			if(!$scope.doc.mainImage) {
+				$scope.doc.mainImage = $scope.doc.images[0].id;
+			}
+			$scope.unprocessedFiles = $scope.unprocessedFiles.slice(1);
 			$scope.$apply();
 			if($scope.unprocessedFiles.length == 0) {
 				$scope.uploading = false;
@@ -130,16 +187,29 @@ angular.module('matchboxarchive', ['ngRoute'])
 				status: 'waiting',
 			};
 			$scope.unprocessedFiles.push(file);
-			$scope.files.push(file);
-			$scope.doc.images.push({name: file.remoteName});
-			if(!$scope.doc.mainImage) {
-				$scope.doc.mainImage = $scope.doc.images[0].name;
-			}
 			if(!$scope.uploading) {
 				upload();
 			}
 		}
+	};
+
+	$scope.save = function(doc) {
+		matchboxService.save(doc).then(function() {
+			$scope.msg = {
+				type: 'success',
+				text: 'Item added to database'
+			};
+		}, function(data) {
+			$scope.msg = {
+				type: 'error',
+				text: 'Item could not be added to database: ' + JSON.stringify(data.data)
+			};
+		})
 	}
+}])
+.controller('searchctrl', ['CONFIG', function(CONFIG) {
+	$scope.results = [];
+	$scope.loading = false;
 }])
 .factory('rolloutService', [function() {
 	var drawer = document.getElementById('drawer');
@@ -154,4 +224,5 @@ angular.module('matchboxarchive', ['ngRoute'])
 }])
 .value('CONFIG', {
 	s3Endpoint: '/bucket/',
+	infiniteScrollLoad: 20,
 })

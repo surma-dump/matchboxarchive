@@ -71,6 +71,10 @@ html {
 	}
 }
 
+#result {
+	padding: 10px;
+}
+
 body {
 	margin-left: $sidebar-width;
 }
@@ -94,4 +98,24 @@ label.image {
 			border: 3px solid $red;
 		}
 	}
+}
+
+.message {
+	background-color: $gray2;
+	border: 3px solid transparent;
+	margin: 5px 0;
+	padding: 5px;
+	&.success {
+		border-color: green;
+	}
+	&.error {
+		border-color: $red;
+	}
+}
+
+.thing {
+	display: inline-block;
+	width: 120px;
+	height: 120px;
+	background-color: $red;
 }
