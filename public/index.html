@@ -15,58 +15,8 @@
 		<div id="sidebar">
 		</div>
 		<div id="result">
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
-			<div class="thing"></div>
+			<img class="thumb" ng-repeat="result in results" ng-src="/bucket/{{result.mainImage}}">
+			<img class="thumb load-trigger" src="http://placehold.it/250x250&text=Loading..." ng-show="hasMore">
 		</div>
 
 		<script src="/js/vendor/angular.min.js"></script>

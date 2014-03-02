@@ -113,11 +113,11 @@ label.image {
 	}
 }
 
-.thing {
+.thumb {
 	display: inline-block;
-	width: 120px;
-	height: 120px;
-	background-color: $red;
+	max-width: 150px;
+	max-height: 150px;
+	margin: 5px;
 }
 
 .close {

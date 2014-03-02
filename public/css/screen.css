@@ -190,11 +190,11 @@ label.image input[type=radio]:checked ~ img.thumb {
 }
 
 /* line 116, ../sass/screen.scss */
-.thing {
+.thumb {
   display: inline-block;
-  width: 120px;
-  height: 120px;
-  background-color: #ff4119;
+  max-width: 150px;
+  max-height: 150px;
+  margin: 5px;
 }
 
 /* line 123, ../sass/screen.scss */

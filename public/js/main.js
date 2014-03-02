@@ -13,7 +13,7 @@ angular.module('matchboxarchive', ['ngRoute'])
 				data: data.data
 			}
 		}
-		}
+	}
 }])
 .factory('userService', ['$http', '$q', function($http, $q) {
 	var userService = {
@@ -92,6 +92,12 @@ angular.module('matchboxarchive', ['ngRoute'])
 		get: function(id) {
 			return $http({
 				url: '/matchboxes/'+id,
+				method: 'GET',
+			}).then(helper.httpPromiseResolver);
+		},
+		query: function(qry) {
+			return $http({
+				url: '/matchboxes?'+JSON.stringify(qry),
 				method: 'GET',
 			}).then(helper.httpPromiseResolver);
 		}
@@ -207,10 +213,35 @@ angular.module('matchboxarchive', ['ngRoute'])
 		})
 	}
 }])
-.controller('searchctrl', ['$scope', 'rolloutService', 'CONFIG', function($scope, rolloutService, CONFIG) {
+.controller('searchctrl', ['$scope', '$timeout', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $timeout, matchboxService, rolloutService, CONFIG) {
 	$scope.results = [];
-	$scope.loading = false;
+	$scope.page = 0;
+	$scope.hasMore = true;
 	$scope.rolloutService = rolloutService;
+
+	$timeout(function poll() {
+		if(!$scope.hasMore) {
+			return;
+		}
+
+		var offset = document.querySelector('.load-trigger').getClientRects()[0].top - window.innerHeight;
+		if(offset < 10) {
+			matchboxService.query({
+				'visible': true,
+				'$skip': $scope.page*CONFIG.infiniteScrollLoad,
+				'$limit': CONFIG.infiniteScrollLoad
+			}).then(function(data) {
+				$scope.page += 1;
+				$scope.hasMore = data.data.length == CONFIG.infiniteScrollLoad;
+				for(var i in data.data) {
+					$scope.results.push(data.data[i]);
+				}
+				$timeout(poll, CONFIG.infiniteScrollPoll);
+			})
+			return;
+		}
+		$timeout(poll, CONFIG.infiniteScrollPoll);
+	}, CONFIG.infiniteScrollPoll)
 }])
 .factory('rolloutService', [function() {
 	var drawer = document.getElementById('drawer');
@@ -226,6 +257,7 @@ angular.module('matchboxarchive', ['ngRoute'])
 .value('CONFIG', {
 	s3Endpoint: '/bucket/',
 	infiniteScrollLoad: 20,
+	infiniteScrollPoll: 200,
 });
 
 angular.bootstrap(document, ['matchboxarchive']);
