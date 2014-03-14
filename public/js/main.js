@@ -210,8 +210,21 @@ angular.module('matchboxarchive', ['ngRoute'])
 				type: 'error',
 				text: 'Item could not be added to database: ' + JSON.stringify(data.data)
 			};
-		})
-	}
+		});
+	};
+
+	$scope.remove = function(imgId) {
+		var idx = -1;
+		var imgs = $scope.doc.images;
+		for(var i in imgs) {
+			if(imgs[i].id == imgId) {
+				idx = i;
+			}
+		}
+		if(idx != -1){
+			$scope.doc.images = imgs.slice(0, parseInt(idx)).concat(imgs.slice(parseInt(idx)+1));
+		}
+	};	
 }])
 .controller('searchctrl', ['$scope', '$timeout', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $timeout, matchboxService, rolloutService, CONFIG) {
 	$scope.results = [];
