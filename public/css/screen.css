@@ -68,12 +68,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
-/* line 21, ../sass/screen.scss */
+/* line 22, ../sass/screen.scss */
 * {
   box-sizing: border-box;
 }
 
-/* line 35, ../sass/screen.scss */
+/* line 36, ../sass/screen.scss */
 html {
   background-color: black;
   font-family: 'PT Sans', sans-serif;
@@ -81,7 +81,7 @@ html {
   color: white;
 }
 
-/* line 41, ../sass/screen.scss */
+/* line 42, ../sass/screen.scss */
 #sidebar, #drawer {
   padding: 10px;
   position: fixed;
@@ -92,7 +92,7 @@ html {
   background: #322c2b;
 }
 
-/* line 51, ../sass/screen.scss */
+/* line 52, ../sass/screen.scss */
 #sidebar {
   left: 0;
   border-right-width: 3px;
@@ -112,7 +112,7 @@ html {
   transition-timing-function: ease-in-out;
 }
 
-/* line 61, ../sass/screen.scss */
+/* line 62, ../sass/screen.scss */
 #drawer {
   left: -120px;
   -webkit-transition-property: left;
@@ -128,42 +128,42 @@ html {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 66, ../sass/screen.scss */
+/* line 67, ../sass/screen.scss */
 #drawer.show {
   left: 480px;
 }
-/* line 68, ../sass/screen.scss */
+/* line 69, ../sass/screen.scss */
 #drawer.show + #sidebar {
   border-right-color: #ff4119;
 }
 
-/* line 74, ../sass/screen.scss */
+/* line 75, ../sass/screen.scss */
 #result {
   padding: 10px;
 }
 
-/* line 78, ../sass/screen.scss */
+/* line 79, ../sass/screen.scss */
 body {
   margin-left: 480px;
 }
 
-/* line 82, ../sass/screen.scss */
+/* line 83, ../sass/screen.scss */
 label {
   display: block;
   margin: 5px 0px;
 }
 
-/* line 88, ../sass/screen.scss */
+/* line 89, ../sass/screen.scss */
 label.image {
   position: relative;
   display: inline-block;
   padding: 0;
 }
-/* line 92, ../sass/screen.scss */
+/* line 93, ../sass/screen.scss */
 label.image input[type=radio] {
   display: none;
 }
-/* line 94, ../sass/screen.scss */
+/* line 95, ../sass/screen.scss */
 label.image input[type=radio] ~ img.thumb {
   box-sizing: content-box;
   max-width: 120px;
@@ -172,11 +172,11 @@ label.image input[type=radio] ~ img.thumb {
   padding: 0;
   border: 3px solid transparent;
 }
-/* line 102, ../sass/screen.scss */
+/* line 103, ../sass/screen.scss */
 label.image input[type=radio]:checked ~ img.thumb {
   border: 3px solid #ff4119;
 }
-/* line 106, ../sass/screen.scss */
+/* line 107, ../sass/screen.scss */
 label.image .delbutton {
   position: absolute;
   top: 3px;
@@ -190,30 +190,30 @@ label.image .delbutton {
   cursor: pointer;
 }
 
-/* line 120, ../sass/screen.scss */
+/* line 121, ../sass/screen.scss */
 .message {
   background-color: #4b4b4b;
   border: 3px solid transparent;
   margin: 5px 0;
   padding: 5px;
 }
-/* line 125, ../sass/screen.scss */
+/* line 126, ../sass/screen.scss */
 .message.success {
   border-color: green;
 }
-/* line 128, ../sass/screen.scss */
+/* line 129, ../sass/screen.scss */
 .message.error {
   border-color: #ff4119;
 }
 
-/* line 133, ../sass/screen.scss */
+/* line 134, ../sass/screen.scss */
 .thumb {
   display: inline-block;
   max-width: 150px;
   max-height: 150px;
 }
 
-/* line 139, ../sass/screen.scss */
+/* line 140, ../sass/screen.scss */
 .close {
   display: block;
   position: absolute;
@@ -222,4 +222,10 @@ label.image .delbutton {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+/* line 150, ../sass/screen.scss */
+.transparent {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  opacity: 0.5;
 }

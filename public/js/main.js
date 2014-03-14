@@ -136,7 +136,6 @@ angular.module('matchboxarchive', ['ngRoute'])
 	}
 }])
 .controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, CONFIG){
-	rolloutService.rollOut();
 	userService.refreshState().then(function(isLoggedIn) {
 		if(!isLoggedIn) {
 			$location.path('/login');
@@ -206,12 +205,12 @@ angular.module('matchboxarchive', ['ngRoute'])
 		matchboxService.save(doc).then(function() {
 			$scope.msg = {
 				type: 'success',
-				text: 'Item added to database'
+				text: 'Item saved'
 			};
 		}, function(data) {
 			$scope.msg = {
 				type: 'error',
-				text: 'Item could not be added to database: ' + JSON.stringify(data.data)
+				text: 'Item could not be saved: ' + JSON.stringify(data.data)
 			};
 		});
 	};
@@ -229,38 +228,78 @@ angular.module('matchboxarchive', ['ngRoute'])
 		}
 	};	
 }])
-.controller('searchctrl', ['$scope', '$timeout', '$location', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $timeout, $location, matchboxService, rolloutService, CONFIG) {
+.controller('detailsctrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, CONFIG){
+	$scope.isLoggedIn = function() {
+		return userService.isLoggedIn
+	};
+	$scope.doc = {
+		images: [],
+		metadata: {}
+	};
+	if($routeParams.id != "") {
+		matchboxService.get($routeParams.id).then(function(doc) {
+			$scope.doc = doc.data;
+		});
+	}
+
+	$scope.editMatchbox = function(imgId) {
+		$location.path('/edit/'+imgId);
+	};	
+}])
+.controller('searchctrl', ['$scope', '$interval', '$location', 'matchboxService', 'rolloutService', 'userService', 'CONFIG', function($scope, $interval, $location, matchboxService, rolloutService, userService, CONFIG) {
 	$scope.results = [];
 	$scope.page = 0;
 	$scope.hasMore = true;
-	$scope.rolloutService = rolloutService;
 
-	$timeout(function poll() {
+	$scope.isLoggedIn = function() {
+		return userService.isLoggedIn;
+	};
+
+	$scope.query = {
+		'visible': true,
+	};
+
+	$interval(function poll() {
 		if(!$scope.hasMore) {
 			return;
 		}
 
 		var offset = document.querySelector('.load-trigger').getClientRects()[0].top - window.innerHeight;
 		if(offset < 10) {
-			matchboxService.query({
-				'visible': true,
-				'$skip': $scope.page*CONFIG.infiniteScrollLoad,
-				'$limit': CONFIG.infiniteScrollLoad
-			}).then(function(data) {
+			var pagedQuery = $scope.query;
+			pagedQuery['$skip'] = $scope.page*CONFIG.infiniteScrollLoad;
+			pagedQuery['$limit'] = CONFIG.infiniteScrollLoad;
+			matchboxService.query(pagedQuery).then(function(data) {
 				$scope.page += 1;
 				$scope.hasMore = data.data.length == CONFIG.infiniteScrollLoad;
 				for(var i in data.data) {
 					$scope.results.push(data.data[i]);
 				}
-				$timeout(poll, CONFIG.infiniteScrollPoll);
 			})
 			return;
 		}
-		$timeout(poll, CONFIG.infiniteScrollPoll);
 	}, CONFIG.infiniteScrollPoll);
 
+	$scope.queryData = {};
+
+	$scope.newSearch = function() {
+		$scope.query = {};
+		if(!($scope.isLoggedIn() && ($scope.queryData.showHidden))) {
+			$scope.query['visible'] = true;
+		}
+		$scope.page = 0;
+		$scope.hasMore = true;
+		$scope.results = [];
+	};
+
 	$scope.showDetails = function(imgId) {
+		rolloutService.rollOut();
 		$location.path('/details/'+imgId);
+	};
+
+	$scope.closeDrawer = function() {
+		rolloutService.rollIn();
+		$location.path('/');
 	};
 }])
 .factory('rolloutService', [function() {

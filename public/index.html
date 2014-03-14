@@ -8,14 +8,20 @@
 	</head>
 	<body ng-controller="searchctrl">
 		<div id="drawer">
-			<a class="close" ng-click="rolloutService.rollIn()">&times;</a>
+			<a class="close" ng-click="closeDrawer()">&times;</a>
 			<div ng-view>
 			</div>
 		</div>
 		<div id="sidebar">
+			<label ng-show="isLoggedIn()">
+				<input type="checkbox" ng-model="queryData.showHidden">Show hidden
+			</label>
+			<label>
+				<button ng-click="newSearch()">Search</button>
+			</label>
 		</div>
 		<div id="result">
-			<img class="thumb" ng-repeat="result in results" ng-src="/bucket/{{result.mainImage}}" ng-click="showDetails(result.id)" >
+			<img class="thumb" ng-repeat="result in results" ng-src="/bucket/{{result.mainImage}}" ng-click="showDetails(result.id)" ng-class="{transparent : !result.visible}">
 			<img class="thumb load-trigger" src="http://placehold.it/250x250&text=Loading..." ng-show="hasMore">
 		</div>
 
