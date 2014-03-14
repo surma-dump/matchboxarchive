@@ -1,0 +1,14 @@
+<label class="image" ng-repeat="img in doc.images">
+	<img ng-src="/bucket/{{img.id}}" class="thumb">
+</label>
+<label>
+	{{doc.metadata.country}}
+</label>
+<label>
+	{{doc.metadata.width}}x{{doc.metadata.height}}x{{doc.metadata.depth}}
+</label>
+<label ng-show="isLoggedIn">
+	<button ng-click="editMatchbox(doc.id)">Edit</button>
+	<button ng-click="duplicateMatchbox(doc)">Duplicate</button>
+	<button ng-click="deleteMatchbox(doc.id)">Delete</button>
+</label>

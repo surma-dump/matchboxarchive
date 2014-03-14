@@ -89,6 +89,12 @@ angular.module('matchboxarchive', ['ngRoute'])
 				method: 'GET',
 			}).then(helper.httpPromiseResolver);
 		},
+		delete: function(id) {
+			return $http({
+				url: '/matchboxes/'+id,
+				method: 'DELETE',
+			}).then(helper.httpPromiseResolver);
+		},
 		query: function(qry) {
 			return $http({
 				url: '/matchboxes?'+JSON.stringify(qry),
@@ -202,11 +208,12 @@ angular.module('matchboxarchive', ['ngRoute'])
 	};
 
 	$scope.save = function(doc) {
-		matchboxService.save(doc).then(function() {
+		matchboxService.save(doc).then(function(data) {
 			$scope.msg = {
 				type: 'success',
 				text: 'Item saved'
 			};
+			$location.path('/details/'+data.data.id);
 		}, function(data) {
 			$scope.msg = {
 				type: 'error',
@@ -244,7 +251,21 @@ angular.module('matchboxarchive', ['ngRoute'])
 
 	$scope.editMatchbox = function(imgId) {
 		$location.path('/edit/'+imgId);
-	};	
+	};
+
+	$scope.deleteMatchbox = function(imgId) {
+		if(confirm('Do you really want to delete this matchbox')) {
+			matchboxService.delete(imgId);
+		}
+	};
+
+	$scope.duplicateMatchbox = function(matchbox) {
+		delete matchbox.id;
+		matchboxService.create(matchbox).then(function(data) {
+			$location.path('/edit/'+data.data.id);
+		});
+	}
+
 }])
 .controller('searchctrl', ['$scope', '$interval', '$location', 'matchboxService', 'rolloutService', 'userService', 'CONFIG', function($scope, $interval, $location, matchboxService, rolloutService, userService, CONFIG) {
 	$scope.results = [];
@@ -301,6 +322,11 @@ angular.module('matchboxarchive', ['ngRoute'])
 		rolloutService.rollIn();
 		$location.path('/');
 	};
+
+	$scope.newMatchbox = function() {
+		rolloutService.rollOut();
+		$location.path('/upload');
+	}
 }])
 .factory('rolloutService', [function() {
 	var drawer = document.getElementById('drawer');
