@@ -2,16 +2,10 @@ angular.module('matchboxarchive', ['ngRoute'])
 .factory('helper', [function() {
 	return {
 		httpPromiseResolver: function(data) {
-			if(data.status == 200) {
-				return {
-					error: false,
-					data: data.data
-				};
-			}
 			return {
-				error: true,
+				error: data.status != 200,
 				data: data.data
-			}
+			};
 		}
 	}
 }])
@@ -117,8 +111,12 @@ angular.module('matchboxarchive', ['ngRoute'])
 		controller: 'loginctrl'
 	})
 	.when('/upload', {
-		templateUrl: 'partials/upload.html',
-		controller: 'uploadctrl'
+		templateUrl: 'partials/metadata.html',
+		controller: 'metadatactrl'
+	})
+	.when('/edit/:id', {
+		templateUrl: 'partials/metadata.html',
+		controller: 'metadatactrl'
 	})
 	.otherwise({
 		redirectTo: '/'
@@ -137,7 +135,7 @@ angular.module('matchboxarchive', ['ngRoute'])
 		userService.logout();
 	}
 }])
-.controller('uploadctrl', ['$scope', '$location', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $q, userService, matchboxService, rolloutService, CONFIG){
+.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, CONFIG){
 	rolloutService.rollOut();
 	userService.refreshState().then(function(isLoggedIn) {
 		if(!isLoggedIn) {
@@ -150,6 +148,11 @@ angular.module('matchboxarchive', ['ngRoute'])
 		images: [],
 		metadata: {}
 	};
+	if($routeParams.id != "") {
+		matchboxService.get($routeParams.id).then(function(doc) {
+			$scope.doc = doc.data;
+		});
+	}
 	$scope.unprocessedFiles = [];
 	$scope.uploading = false;
 	$scope.selectedFilesChanged = function(input) {
@@ -226,7 +229,7 @@ angular.module('matchboxarchive', ['ngRoute'])
 		}
 	};	
 }])
-.controller('searchctrl', ['$scope', '$timeout', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $timeout, matchboxService, rolloutService, CONFIG) {
+.controller('searchctrl', ['$scope', '$timeout', '$location', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $timeout, $location, matchboxService, rolloutService, CONFIG) {
 	$scope.results = [];
 	$scope.page = 0;
 	$scope.hasMore = true;
@@ -254,7 +257,11 @@ angular.module('matchboxarchive', ['ngRoute'])
 			return;
 		}
 		$timeout(poll, CONFIG.infiniteScrollPoll);
-	}, CONFIG.infiniteScrollPoll)
+	}, CONFIG.infiniteScrollPoll);
+
+	$scope.showDetails = function(imgId) {
+		$location.path('/details/'+imgId);
+	};
 }])
 .factory('rolloutService', [function() {
 	var drawer = document.getElementById('drawer');

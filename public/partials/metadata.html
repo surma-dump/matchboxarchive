@@ -1,4 +1,4 @@
-<form id="upload">
+<form id="metadata">
 	<label>
 		<input type="file" onchange="angular.element(this).scope().selectedFilesChanged(this)" multiple>
 		<button ng-click="addFiles(selectedFiles)">Upload</button>
@@ -17,6 +17,15 @@
 	</label>
 	<label>
 		<input type="text" ng-model="doc.metadata.country" placeholder="Country">
+	</label>
+	<label>
+		<input type="number" ng-model="doc.metadata.width" placeholder="Width" min="0.0" step="0.1">
+	</label>
+	<label>
+		<input type="number" ng-model="doc.metadata.height" placeholder="Height" min="0.0" step="0.1">
+	</label>
+	<label>
+		<input type="number" ng-model="doc.metadata.depth" placeholder="Depth" min="0.0" step="0.1">
 	</label>
 	<div>
 		<button ng-click="save(doc)">Save</button>
