@@ -141,7 +141,7 @@ angular.module('matchboxarchive', ['ngRoute'])
 		userService.logout();
 	}
 }])
-.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, CONFIG){
+.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'thumbGenerator', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, thumbGenerator, CONFIG){
 	userService.refreshState().then(function(isLoggedIn) {
 		if(!isLoggedIn) {
 			$location.path('/login');
@@ -339,10 +339,48 @@ angular.module('matchboxarchive', ['ngRoute'])
 		}
 	}
 }])
+.factory('thumbGenerator', ['$q', '$document', function($q, $document) {
+	var defaultValues = function(opts) {
+		opts.maxWidth = opts.maxWidth || 200;
+		opts.maxHeight = opts.maxHeight || 200;
+		return opts;
+	};
+	var resizeImage = function(opts, img) {
+		var cnv = $document.createElement('canvas');
+		var ctx = cnv.getContext('2d');
+		cnv.width = opts.maxWidth;
+		cnv.height = opts.maxHeight;
+
+		ctx.drawImage(img, 0, 0, opts.maxWidth, opts.maxHeight);
+
+		var deferred = $q.defer();
+		cnv.toBlob(function(blob) {
+			console.log(blob)
+			deferred.resolve(blob);
+		}, "image/png");
+		return deferred.promise;
+	};
+
+	return function(opts) {
+		opts = defaultValues(opts);
+		var img = $document.createElement('img');
+		img.crossOrigin = 'anonymous';
+
+		var deferred = $q.defer();
+		if(typeof opts.image === 'string') {
+			img.addEventListener('load', function() {
+				deferred.resolve(resizeImage(img, opts));
+			});
+			img.src = opts.image;
+		}
+		return deferred.promise;
+	};
+}])
 .value('CONFIG', {
 	s3Endpoint: '/bucket/',
 	infiniteScrollLoad: 20,
 	infiniteScrollPoll: 200,
+	thumbSize: 150,
 });
 
 angular.bootstrap(document, ['matchboxarchive']);
