@@ -1,5 +1,5 @@
 var deployd = require('deployd');
-var s3 = require('dpd-s3');
+var s3 = require('s3-bucket-resource');
 var fs = require('fs');
 
 var s3conf = {
