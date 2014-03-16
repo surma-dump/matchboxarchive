@@ -21,11 +21,13 @@
 			</label>
 		</div>
 		<div id="result">
-			<img class="thumb" ng-repeat="result in results" ng-src="/bucket/{{result.mainImage}}" ng-click="showDetails(result.id)" ng-class="{transparent : !result.visible}">
+			<img class="thumb" ng-repeat="result in results" ng-src="/bucket/{{result.mainImage}}.thumb.png" ng-click="showDetails(result.id)" ng-class="{transparent : !result.visible}">
 			<img class="thumb load-trigger" src="http://placehold.it/250x250&text=Loading..." ng-show="hasMore">
 			<img class="thumb" src="http://placehold.it/250x250&text=New" ng-show="isLoggedIn()" ng-click="newMatchbox()">
 		</div>
 
+		<script src="/js/vendor/lodash.min.js"></script>
+		<script src="/js/vendor/canvas-to-blob.min.js"></script>
 		<script src="/js/vendor/angular.min.js"></script>
 		<script src="/js/vendor/angular-route.min.js"></script>
 		<script src="/js/main.js"></script>

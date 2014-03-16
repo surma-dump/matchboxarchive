@@ -141,7 +141,7 @@ angular.module('matchboxarchive', ['ngRoute'])
 		userService.logout();
 	}
 }])
-.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, CONFIG){
+.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'thumbGenerator', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, thumbGenerator, CONFIG){
 	userService.refreshState().then(function(isLoggedIn) {
 		if(!isLoggedIn) {
 			$location.path('/login');
@@ -153,58 +153,82 @@ angular.module('matchboxarchive', ['ngRoute'])
 		images: [],
 		metadata: {}
 	};
-	if($routeParams.id != "") {
+	if($routeParams.id) {
 		matchboxService.get($routeParams.id).then(function(doc) {
 			$scope.doc = doc.data;
 		});
 	}
-	$scope.unprocessedFiles = [];
-	$scope.uploading = false;
+
+	$scope.selectedFiles = [];
 	$scope.selectedFilesChanged = function(input) {
 		$scope.selectedFiles = input.files;
 	};
 
-	var upload = function() {
-		$scope.uploading = true;
-		var file = $scope.unprocessedFiles[0];
-
+	var uploadFile = function(file, name) {
+		var deferred = $q.defer();
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST', CONFIG.s3Endpoint+file.remoteName, true);
-		xhr.upload.addEventListener('progress', function(ev) {
-			file.status = 'uploading';
-			$scope.$apply();
-		}, false);
+		xhr.open('POST', CONFIG.s3Endpoint+name, true);
 		xhr.addEventListener('load', function(ev) {
-			file.status = 'done';
-			$scope.doc.images.push({id: file.remoteName});
+			deferred.resolve();
+		});
+		xhr.send(file);
+		return deferred.promise;
+	};
+
+	$scope.unprocessedFiles = [];
+	var uploading = false;
+	var upload = function() {
+		if($scope.unprocessedFiles.length < 1) {
+			uploading = false;
+			return;
+		}
+		if(uploading) {
+			return;
+		}
+		uploading = true;
+		uploadNextItem();
+	};
+
+	var uploadNextItem = function() {
+		var file = $scope.unprocessedFiles[0];
+		var deferred = $q.defer();
+		file.promise = deferred.promise;
+		var bigUpload = uploadFile(file.file, file.name);
+		var thumbUpload = thumbGenerator({
+			image: file.file,
+		}).then(function(blob) {
+			return uploadFile(blob, file.name+'.thumb.png');
+		});
+
+		deferred.resolve($q.all([bigUpload, thumbUpload]).then(function() {
+			$scope.doc.images.push({
+				id: file.name,
+			});
 			if(!$scope.doc.mainImage) {
 				$scope.doc.mainImage = $scope.doc.images[0].id;
 			}
 			$scope.unprocessedFiles = $scope.unprocessedFiles.slice(1);
-			$scope.$apply();
 			if($scope.unprocessedFiles.length == 0) {
-				$scope.uploading = false;
-				return;
-			}
-			upload();
-		})
-		xhr.send(file.file);
-	};
+				uploading = false;
+			} else {
+				uploadNextItem();
+			}	
+		}).promise);
+	}
 
 	$scope.addFiles = function(selectedFiles) {
 		for(var i = 0; i < selectedFiles.length; i++) {
 			var selectedFile = selectedFiles[i];
+			var name = new Date().toISOString() + Math.random().toString(36);
 			var ext = selectedFile.name.substr(selectedFile.name.lastIndexOf('.') + 1);
 			var file = {
 				file: selectedFile,
-				remoteName: new Date().toISOString() + Math.random().toString(36).substring(2,7) + '.' + ext,
-				status: 'waiting',
+				name: name+'.'+ext,
+				promise: null,
 			};
 			$scope.unprocessedFiles.push(file);
-			if(!$scope.uploading) {
-				upload();
-			}
 		}
+		upload();
 	};
 
 	$scope.save = function(doc) {
@@ -339,10 +363,57 @@ angular.module('matchboxarchive', ['ngRoute'])
 		}
 	}
 }])
+.factory('thumbGenerator', ['$q', function($q) {
+	var defaultValues = function(opts) {
+		opts.maxWidth = opts.maxWidth || 200;
+		opts.maxHeight = opts.maxHeight || 200;
+		return opts;
+	};
+	var resizeImage = function(img, opts) {
+		var cnv = document.createElement('canvas');
+		var ctx = cnv.getContext('2d');
+		cnv.width = opts.maxWidth;
+		cnv.height = opts.maxHeight;
+
+		ctx.drawImage(img, 0, 0, opts.maxWidth, opts.maxHeight);
+
+		var deferred = $q.defer();
+		cnv.toBlob(function(blob) {
+			deferred.resolve(blob);
+		}, "image/png");
+		return deferred.promise;
+	};
+
+	return function(opts) {
+		opts = defaultValues(opts);
+		var img = document.createElement('img');
+		var deferred = $q.defer();
+		img.addEventListener('load', function() {
+			deferred.resolve(resizeImage(img, opts));
+		});
+
+		if(typeof opts.image === 'string') {
+			img.crossOrigin = 'anonymous';
+			img.src = opts.image;
+		}
+		else if(opts.image instanceof File) {
+			var fr = new FileReader();
+			fr.addEventListener('loadend', function() {
+				img.src = fr.result;
+			});
+			fr.readAsDataURL(opts.image);
+		} else {
+			deferred.reject('Invalid image type');
+		}
+
+		return deferred.promise;
+	};
+}])
 .value('CONFIG', {
 	s3Endpoint: '/bucket/',
 	infiniteScrollLoad: 20,
 	infiniteScrollPoll: 200,
+	thumbSize: 150,
 });
 
 angular.bootstrap(document, ['matchboxarchive']);

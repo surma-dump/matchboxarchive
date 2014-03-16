@@ -3,7 +3,7 @@ if(!this.hasOwnProperty('visible')) {
 }
 
 var validMainImage = false;
-for(var i in this.images) {
+for(var i in this.images || []) {
     validMainImage = validMainImage || (this.images[i].id == this.mainImage);
 }
 if(!validMainImage) {
