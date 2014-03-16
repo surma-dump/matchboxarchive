@@ -5,10 +5,10 @@
 	</label>
 	<label class="image" ng-repeat="img in doc.images">
 		<input type="radio" ng-model="doc.mainImage" name="mainImage" value="{{img.id}}">
-		<img ng-src="/bucket/{{img.id}}" class="thumb">
+		<img ng-src="/bucket/{{img.id}}.thumb.png" class="thumb">
 		<div ng-click="remove(img.id)" class="delbutton">&times</div>
 	</label>
-	<div ng-show="unprocessedFiles">
+	<div ng-show="unprocessedFiles.length > 0">
 		Uploading {{unprocessedFiles.length}} images...
 	</div>
 	<label>
