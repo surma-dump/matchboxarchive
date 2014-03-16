@@ -164,7 +164,19 @@ angular.module('matchboxarchive', ['ngRoute'])
 		$scope.selectedFiles = input.files;
 	};
 
+	var uploadFile = function(file, name) {
+		var deferred = $q.defer();
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', CONFIG.s3Endpoint+name, true);
+		xhr.addEventListener('load', function(ev) {
+			deferred.resolve();
+		});
+		xhr.send(file.file);
+		return q.promise;
+	};
+
 	var upload = function() {
+		_($scope.unprocessedFiles)
 		$scope.uploading = true;
 		var file = $scope.unprocessedFiles[0];
 
@@ -194,16 +206,16 @@ angular.module('matchboxarchive', ['ngRoute'])
 	$scope.addFiles = function(selectedFiles) {
 		for(var i = 0; i < selectedFiles.length; i++) {
 			var selectedFile = selectedFiles[i];
-			var ext = selectedFile.name.substr(selectedFile.name.lastIndexOf('.') + 1);
+			var name = 
+			var ext = ;
 			var file = {
 				file: selectedFile,
-				remoteName: new Date().toISOString() + Math.random().toString(36).substring(2,7) + '.' + ext,
-				status: 'waiting',
+				name: new Date().toISOString() + Math.random().toString(36),
+				ext: selectedFile.name.substr(selectedFile.name.lastIndexOf('.') + 1),
+				promise: null,
 			};
 			$scope.unprocessedFiles.push(file);
-			if(!$scope.uploading) {
-				upload();
-			}
+			upload();
 		}
 	};
 
