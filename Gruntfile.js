@@ -24,9 +24,20 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
+            '.tmp/compass/css/*',
+            'src/css/*'
         ],
         dest: '.tmp/concat/css/style.css'
       }
+    },
+
+    compass: {
+        css: {
+            options: {
+                sassDir: 'src/sass',
+                css: '.tmp/compass/css'
+            }
+        }
     },
 
     uglify: {
@@ -124,9 +135,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-compass');
 
-  grunt.registerTask('build', ['concat', 'uglify', 'cssmin', 'copy:html', 'copy:css', 'copy:js']);
-  grunt.registerTask('dev-build', ['concat', 'copy:html', 'copy:tmpcss', 'copy:tmpjs']);
+  grunt.registerTask('build', ['compass', 'concat', 'uglify', 'cssmin', 'copy:html', 'copy:css', 'copy:js']);
+  grunt.registerTask('dev-build', ['compass', 'concat', 'copy:html', 'copy:tmpcss', 'copy:tmpjs']);
   grunt.registerTask('heroku', ['build']);
   grunt.registerTask('default', ['build']);
 };

@@ -7,3 +7,4 @@ data
 /public-*
 resources/bucket/config.json
 .sass-cache
+.tmp

@@ -1,16 +1,19 @@
 {
-    "name": "matchboxarchive",
-    "version": "0.0.0",
-    "description": "",
-    "author": "Alexander Surma",
-    "dependencies": {
-        "deployd": "git://github.com/surma-dump/deployd.git",
-        "s3-bucket-resource": "git://github.com/surma-dump/dpd-s3#master",
-        "grunt": "~0.4.4",
-        "grunt-contrib-uglify": "^0.4.0",
-        "grunt-contrib-copy": "^0.5.0",
-        "grunt-contrib-watch": "^0.6.1",
-        "grunt-contrib-cssmin": "^0.9.0",
-        "grunt-contrib-concat": "^0.3.0"
-    }
+  "name": "matchboxarchive",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Alexander Surma",
+  "dependencies": {
+    "deployd": "git://github.com/surma-dump/deployd.git",
+    "s3-bucket-resource": "git://github.com/surma-dump/dpd-s3#master",
+    "grunt": "~0.4.4",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-cssmin": "^0.9.0",
+    "grunt-contrib-concat": "^0.3.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-compass": "^0.7.2"
+  }
 }
