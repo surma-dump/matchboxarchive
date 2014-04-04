@@ -1,5 +1,10 @@
 .dpd
+*.bak
 node_modules
+bower_components
 data
+/public
+/public-*
 resources/bucket/config.json
 .sass-cache
+.tmp
