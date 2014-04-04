@@ -139,6 +139,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['compass', 'concat', 'uglify', 'cssmin', 'copy:html', 'copy:css', 'copy:js']);
   grunt.registerTask('dev-build', ['compass', 'concat', 'copy:html', 'copy:tmpcss', 'copy:tmpjs']);
+  grunt.registerTask('server', ['dev-build', 'watch']);
   grunt.registerTask('heroku', ['build']);
   grunt.registerTask('default', ['build']);
 };

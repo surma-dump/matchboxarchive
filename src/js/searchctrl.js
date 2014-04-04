@@ -3,6 +3,7 @@ window.angular.module('matchboxarchive')
     $scope.results = [];
     $scope.page = 0;
     $scope.hasMore = true;
+    $scope.isLoading = false;
 
     $scope.isLoggedIn = function() {
         return userService.isLoggedIn;
@@ -13,12 +14,13 @@ window.angular.module('matchboxarchive')
     };
 
     $interval(function poll() {
-        if(!$scope.hasMore) {
+        if(!$scope.hasMore || $scope.isLoading) {
             return;
         }
 
         var offset = document.querySelector('.load-trigger').getClientRects()[0].top - window.innerHeight;
         if(offset < 10) {
+            $scope.isLoading = true;
             var pagedQuery = $scope.query;
             pagedQuery['$skip'] = $scope.page*CONFIG.infiniteScrollLoad;
             pagedQuery['$limit'] = CONFIG.infiniteScrollLoad;
@@ -28,6 +30,7 @@ window.angular.module('matchboxarchive')
                 for(var i in data.data) {
                     $scope.results.push(data.data[i]);
                 }
+                $scope.isLoading = false;
             })
             return;
         }
