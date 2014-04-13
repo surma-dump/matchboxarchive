@@ -32,23 +32,23 @@ module.exports = function(grunt) {
     },
 
     compass: {
-        compressed: {
-            options: {
-                force: true,
-                sassDir: 'src/sass',
-                css: '.tmp/compass/css',
-                outputStyle: 'compressed',
-                noLineComments: true
-            }
-        },
-        dev: {
-            options: {
-                force: true,
-                sassDir: 'src/sass',
-                css: '.tmp/compass/css',
-                outputStyle: 'nested'
-            }
+      compressed: {
+        options: {
+          force: true,
+          sassDir: 'src/sass',
+          css: '.tmp/compass/css',
+          outputStyle: 'compressed',
+          noLineComments: true
         }
+      },
+      dev: {
+        options: {
+          force: true,
+          sassDir: 'src/sass',
+          css: '.tmp/compass/css',
+          outputStyle: 'nested'
+        }
+      }
     },
 
     uglify: {
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
             cwd: '.tmp/concat/css',
             src: '**/*.css',
             dest: '.tmp/cssmin'
-        }
+          }
         ]
       }
     },
@@ -138,6 +138,12 @@ module.exports = function(grunt) {
         tasks: ['dev-build'],
         atBegin: true
       }
+    },
+
+    karma: {
+      unit: {
+        configFile: 'test/karma-unit.conf.js'
+      }
     }
   });
 
@@ -147,6 +153,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('build', ['compass:compressed', 'concat', 'uglify', 'cssmin', 'copy:html', 'copy:css', 'copy:js']);
   grunt.registerTask('dev-build', ['compass:dev', 'concat', 'copy:html', 'copy:tmpcss', 'copy:tmpjs']);
