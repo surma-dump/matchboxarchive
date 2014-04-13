@@ -16,6 +16,20 @@ module.exports = function(config) {
       'bower_components/angular-route/angular-route.js',
       'bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js',
 
+      'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/bind-polyfill/index.js',
+
+      'src/js/matchboxarchive.js',
+      'src/js/helper.js',
+      'src/js/thumbgenerator.js',
+      'src/js/userservice.js',
+      'src/js/rolloutservice.js',
+      'src/js/matchboxservice.js',
+      'src/js/detailsctrl.js',
+      'src/js/loginctrl.js',
+      'src/js/metadatactrl.js',
+      'src/js/searchctrl.js',
+
       'test/unit/**/*.js'
     ]
   });

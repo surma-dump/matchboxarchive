@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: ['src/**'],
+        files: ['src/**/*'],
         tasks: ['dev-build'],
         atBegin: true
       }

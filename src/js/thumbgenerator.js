@@ -25,7 +25,12 @@ window.angular.module('matchboxarchive')
         var img = document.createElement('img');
         var deferred = $q.defer();
         img.addEventListener('load', function() {
+            console.log('loaded');
             deferred.resolve(resizeImage(img, opts));
+        });
+        img.addEventListener('error', function() {
+            console.log('error');
+            deferred.reject('Could not load image');
         });
 
         if(typeof opts.image === 'string') {
