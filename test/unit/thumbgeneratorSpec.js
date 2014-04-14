@@ -1,4 +1,7 @@
+'use strict';
+
 describe('Thumbnail Generator', function() {
+  var fixtureURL = '/base/fixtures/image.gif';
   var createTestImage = function(cb) {
     var cnv = document.createElement('canvas');
     cnv.width = 1024;
@@ -19,17 +22,29 @@ describe('Thumbnail Generator', function() {
     expect(this.thumbGenerator).toEqual(jasmine.any(Function));
   });
 
-  it('should change the dimensions of an image url', function(done) {
-    this.thumbGenerator({image: '/base/fixtures/image.gif'})
+  it('should work with an image url', function(done) {
+    this.thumbGenerator({image: fixtureURL})
     .then(function(img) {
       expect(img.width).not.toBe(1024);
       expect(img.height).not.toBe(1024);
       done();
     }, function(error) {
-      console.log(error);
       throw new Error(error);
-      done();
     }.bind(this));
     this.$rootScope.$digest();
+  });
+
+  it('should work with a file', function(done) {
+    createTestImage(function(imgBlob) {
+      this.thumbGenerator({image: imgBlob})
+        .then(function(img) {
+          expect(img.width).not.toBe(1024);
+          expect(img.height).not.toBe(1024);
+          done();
+        }, function(error) {
+          throw new Error(error);
+        }.bind(this));
+      this.$rootScope.$digest();
+    }.bind(this));
   });
 });
