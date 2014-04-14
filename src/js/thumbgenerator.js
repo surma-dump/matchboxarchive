@@ -1,10 +1,11 @@
 window.angular.module('matchboxarchive')
-.factory('thumbGenerator', ['$q', function($q) {
+.factory('thumbGenerator', ['$q', '$rootScope', function($q, $rootScope) {
     var defaultValues = function(opts) {
         opts.maxWidth = opts.maxWidth || 200;
         opts.maxHeight = opts.maxHeight || 200;
         return opts;
     };
+
     var resizeImage = function(img, opts) {
         var cnv = document.createElement('canvas');
         var ctx = cnv.getContext('2d');
@@ -24,19 +25,23 @@ window.angular.module('matchboxarchive')
         opts = defaultValues(opts);
         var img = document.createElement('img');
         var deferred = $q.defer();
-        img.addEventListener('load', function() {
+        img.onload = function() {
             deferred.resolve(resizeImage(img, opts));
-        });
+            $rootScope.$apply();
+        };
+        img.onerror = function() {
+            deferred.reject('Could not load image');
+            $rootScope.$apply();
+        };
 
         if(typeof opts.image === 'string') {
             img.crossOrigin = 'anonymous';
             img.src = opts.image;
-        }
-        else if(opts.image instanceof File) {
+        } else if(opts.image instanceof Blob) {
             var fr = new FileReader();
-            fr.addEventListener('loadend', function() {
+            fr.onloadend = function() {
                 img.src = fr.result;
-            });
+            };
             fr.readAsDataURL(opts.image);
         } else {
             deferred.reject('Invalid image type');
