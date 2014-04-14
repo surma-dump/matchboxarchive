@@ -1,5 +1,3 @@
-'use strict';
-
 describe('Thumbnail Generator', function() {
   var fixtureURL = '/base/fixtures/image.gif';
   var createTestImage = function(cb) {
