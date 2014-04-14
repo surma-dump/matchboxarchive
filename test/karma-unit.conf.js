@@ -30,7 +30,13 @@ module.exports = function(config) {
       'src/js/metadatactrl.js',
       'src/js/searchctrl.js',
 
-      'test/unit/**/*.js'
+      'test/unit/**/*.js',
+
+      {
+        pattern: 'fixtures/**/*',
+        included: false,
+        served: true
+      }
     ]
   });
 };

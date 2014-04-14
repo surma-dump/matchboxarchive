@@ -20,7 +20,7 @@ describe('Thumbnail Generator', function() {
   });
 
   it('should change the dimensions of an image url', function(done) {
-    this.thumbGenerator({image: '/fixtures/image.gif'})
+    this.thumbGenerator({image: '/base/fixtures/image.gif'})
     .then(function(img) {
       expect(img.width).not.toBe(1024);
       expect(img.height).not.toBe(1024);

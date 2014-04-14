@@ -1,10 +1,11 @@
 window.angular.module('matchboxarchive')
-.factory('thumbGenerator', ['$q', function($q) {
+.factory('thumbGenerator', ['$q', '$rootScope', function($q, $rootScope) {
     var defaultValues = function(opts) {
         opts.maxWidth = opts.maxWidth || 200;
         opts.maxHeight = opts.maxHeight || 200;
         return opts;
     };
+
     var resizeImage = function(img, opts) {
         var cnv = document.createElement('canvas');
         var ctx = cnv.getContext('2d');
@@ -25,12 +26,12 @@ window.angular.module('matchboxarchive')
         var img = document.createElement('img');
         var deferred = $q.defer();
         img.addEventListener('load', function() {
-            console.log('loaded');
             deferred.resolve(resizeImage(img, opts));
+            $rootScope.$apply();
         });
-        img.addEventListener('error', function() {
-            console.log('error');
+        img.addEventListener('error', function(error) {
             deferred.reject('Could not load image');
+            $rootScope.$apply();
         });
 
         if(typeof opts.image === 'string') {
