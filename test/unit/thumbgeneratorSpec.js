@@ -1,4 +1,5 @@
 describe('Thumbnail Generator', function() {
+  var $rootScope;
   var fixtureURL = '/base/fixtures/image.gif';
   var createTestImage = function(cb) {
     var cnv = document.createElement('canvas');
@@ -15,66 +16,67 @@ describe('Thumbnail Generator', function() {
     img.src = imageUrl;
   };
 
-  beforeEach(function(done) {
-    module('matchboxarchive');
-    inject(['$rootScope', 'thumbGenerator', function($rootScope, thumbGenerator) {
-      this.thumbGenerator = thumbGenerator;
-      this.$rootScope = $rootScope;
-      done();
-    }.bind(this)]);
-  });
+  beforeEach(module('matchboxarchive'));
+  beforeEach(inject(function($injector) {
+    $rootScope = $injector.get('$rootScope');
+  }));
 
-  it('should be be a function', function() {
-    expect(this.thumbGenerator).toEqual(jasmine.any(Function));
-  });
+  it('should be be a function', inject(function(thumbGenerator) {
+    expect(thumbGenerator).toEqual(jasmine.any(Function));
+  }));
 
   it('should work with an image url', function(done) {
-    this.thumbGenerator({
-      image: fixtureURL
-    }).then(function(imgBlob) {
-      parseImage(imgBlob, function(img) {
-        expect(img.width).not.toBe(1024);
-        expect(img.height).not.toBe(1024);
-        done();
-      });
-    }, function(error) {
-      throw new Error(error);
-    }.bind(this));
-    this.$rootScope.$digest();
-  });
-
-  it('should work with a file', function(done) {
-    createTestImage(function(imgBlob) {
-      this.thumbGenerator({
-        image: imgBlob
+    inject(function(thumbGenerator) {
+      thumbGenerator({
+        image: fixtureURL
       }).then(function(imgBlob) {
         parseImage(imgBlob, function(img) {
-            expect(img.width).not.toBe(1024);
+          expect(img.width).not.toBe(1024);
           expect(img.height).not.toBe(1024);
           done();
         });
       }, function(error) {
         throw new Error(error);
-      }.bind(this));
-      this.$rootScope.$digest();
-    }.bind(this));
+      });
+      $rootScope.$digest();
+    });
+  });
+
+  it('should work with a file', function(done) {
+    inject(function(thumbGenerator) {
+      createTestImage(function(imgBlob) {
+        thumbGenerator({
+          image: imgBlob
+        }).then(function(imgBlob) {
+          parseImage(imgBlob, function(img) {
+            expect(img.width).not.toBe(1024);
+            expect(img.height).not.toBe(1024);
+            done();
+          });
+        }, function(error) {
+          throw new Error(error);
+        });
+        $rootScope.$digest();
+      });
+    });
   });
 
   it('should yield an image with the given size', function(done) {
-    this.thumbGenerator({
-      image: fixtureURL,
-      maxWidth: 250,
-      maxHeight: 250
-    }).then(function(imgBlob) {
-      parseImage(imgBlob, function(img) {
-        expect(img.width).toBe(250);
-        expect(img.height).toBe(250);
-        done();
+    inject(function(thumbGenerator) {
+      thumbGenerator({
+        image: fixtureURL,
+        maxWidth: 250,
+        maxHeight: 250
+      }).then(function(imgBlob) {
+        parseImage(imgBlob, function(img) {
+          expect(img.width).toBe(250);
+          expect(img.height).toBe(250);
+          done();
+        });
+      }, function(error) {
+        throw new Error(error);
       });
-    }, function(error) {
-      throw new Error(error);
-    }.bind(this));
-    this.$rootScope.$digest();
+      $rootScope.$digest();
+    });
   });
-
 });
