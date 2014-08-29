@@ -15,7 +15,11 @@
 		<input type="checkbox" ng-model="doc.visible">
 		Publicly visible
 	</label>
-	<label>
+    <label ng-repeat="metafield in metafields">
+        <input ng-if="metafield.type == 'text'" type="text" ng-model="doc.metadata[metafield.name]" placeholder="{{ metafield.placeholder }}">
+        <input ng-if="metafield.type == 'number'" type="number" ng-model="doc.metadata[metafield.name]" placeholder="{{ metafield.placeholder }}" min="{{ metafield.minimum }}" step="{{ metafield.step }}">
+    </label>
+	<!-- <label>
 		<input type="text" ng-model="doc.metadata.country" placeholder="Country">
 	</label>
 	<label>
@@ -26,7 +30,7 @@
 	</label>
 	<label>
 		<input type="number" ng-model="doc.metadata.depth" placeholder="Depth" min="0.0" step="0.1">
-	</label>
+	</label> -->
 	<div>
 		<button ng-click="save(doc)">Save</button>
 	</div>

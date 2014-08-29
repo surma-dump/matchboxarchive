@@ -1,11 +1,8 @@
 <label class="image" ng-repeat="img in doc.images">
 	<img ng-src="/bucket/{{img.id}}.thumb.png" class="thumb">
 </label>
-<label>
-	{{doc.metadata.country}}
-</label>
-<label>
-	{{doc.metadata.width}}x{{doc.metadata.height}}x{{doc.metadata.depth}}
+<label ng-repeat="metafield in metafields">
+	{{metafield.placeholder}}: {{doc.metadata[metafield.name]}}
 </label>
 <label ng-show="isLoggedIn()">
 	<button ng-click="editMatchbox(doc.id)">Edit</button>

@@ -4,6 +4,7 @@ window.angular.module('matchboxarchive')
     $scope.page = 0;
     $scope.hasMore = true;
     $scope.isLoading = false;
+    $scope.metafields = CONFIG.metafields;
 
     $scope.isLoggedIn = function() {
         return userService.isLoggedIn;

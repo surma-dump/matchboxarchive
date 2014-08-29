@@ -16,12 +16,12 @@
             <label ng-show="isLoggedIn()">
                 <input type="checkbox" ng-model="queryData.showHidden">Show hidden
             </label>
-            <label>
-                <input type="text" ng-model="queryData.country" placeholder="country">
-                <input type="number" ng-model="queryData.min_width">
-                <input type="number" ng-model="queryData.max_width">
-                <button ng-click="newSearch()">Search</button>
+            <label ng-repeat="metafield in metafields">
+                <input ng-if="metafield.type == 'text'" type="text" ng-model="queryData[metafield.name]" placeholder="{{ metafield.placeholder }}">
+                <input ng-if="metafield.type == 'number'" type="number" ng-model="queryData['min_'+metafield.name]" placeholder="{{ metafield.placeholder }} minimum">
+                <input ng-if="metafield.type == 'number'" type="number" ng-model="queryData['max_'+metafield.name]" placeholder="{{ metafield.placeholder }} maximum">
             </label>
+            <button ng-click="newSearch()">Search</button>
         </div>
         <div id="result">
             <img class="thumb" ng-repeat="result in results" ng-src="/bucket/{{result.mainImage}}.thumb.png" ng-click="showDetails(result.id)" ng-class="{transparent : !result.visible}">
