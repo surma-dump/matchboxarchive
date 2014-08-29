@@ -17,6 +17,9 @@
                 <input type="checkbox" ng-model="queryData.showHidden">Show hidden
             </label>
             <label>
+                <input type="text" ng-model="queryData.country" placeholder="country">
+                <input type="number" ng-model="queryData.min_width">
+                <input type="number" ng-model="queryData.max_width">
                 <button ng-click="newSearch()">Search</button>
             </label>
         </div>

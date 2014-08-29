@@ -38,11 +38,30 @@ window.angular.module('matchboxarchive')
 
     $scope.queryData = {};
 
+    function queryGenerator(queryData) {
+        var query = {};
+
+        if(queryData.country) {
+            query['metadata.country'] = queryData.country;
+        }
+
+        if(queryData.min_width) {
+            query['metadata.width'] = angular.extend(query['metadata.width'] || {}, {'$gte': queryData.min_width});
+        }
+        if(queryData.max_width) {
+            query['metadata.width'] = angular.extend(query['metadata.width'] || {}, {'$lte': queryData.max_width});
+        }
+
+        return query;
+    };
+
     $scope.newSearch = function() {
-        $scope.query = {};
+        $scope.query = queryGenerator($scope.queryData);
+
         if(!($scope.isLoggedIn() && ($scope.queryData.showHidden))) {
             $scope.query['visible'] = true;
         }
+
         $scope.page = 0;
         $scope.hasMore = true;
         $scope.results = [];
