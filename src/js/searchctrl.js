@@ -42,16 +42,23 @@ window.angular.module('matchboxarchive')
     function queryGenerator(queryData) {
         var query = {};
 
-        if(queryData.country) {
-            query['metadata.country'] = queryData.country;
-        }
-
-        if(queryData.min_width) {
-            query['metadata.width'] = angular.extend(query['metadata.width'] || {}, {'$gte': queryData.min_width});
-        }
-        if(queryData.max_width) {
-            query['metadata.width'] = angular.extend(query['metadata.width'] || {}, {'$lte': queryData.max_width});
-        }
+        $scope.metafields.forEach(function(metafield) {
+            switch(metafield.type) {
+            case 'text':
+                if(queryData[metafield.name]) {
+                    query['metadata.'+metafield.name] = queryData[metafield.name];
+                }
+            break;
+            case 'number':
+                if(queryData['min_'+metafield.name]) {
+                    query['metadata.'+metafield.name] = angular.extend(query['metadata.'+metafield.name] || {}, {'$gte': queryData['min_'+metafield.name]});
+                }
+                if(queryData['max_'+metafield.name]) {
+                    query['metadata.'+metafield.name] = angular.extend(query['metadata.'+metafield.name] || {}, {'$lte': queryData['max_'+metafield.name]});
+                }
+            break;
+            }
+        });
 
         return query;
     };
