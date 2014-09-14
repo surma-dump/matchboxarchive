@@ -1,4 +1,4 @@
-window.angular.module('matchboxarchive', ['ngRoute'])
+window.angular.module('matchboxarchive', ['ngRoute', 'ui.select2'])
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider
     .when('/', {
@@ -33,7 +33,7 @@ window.angular.module('matchboxarchive', ['ngRoute'])
         {
             name: "country",
             type: "text",
-            placeholder: "Country"
+            placeholder: "Country",
         },
         {
             name: "year",

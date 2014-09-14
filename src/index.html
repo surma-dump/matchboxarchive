@@ -17,7 +17,10 @@
                 <input type="checkbox" ng-model="queryData.showHidden">Show hidden
             </label>
             <label ng-repeat="metafield in metafields">
-                <input ng-if="metafield.type == 'text'" type="text" ng-model="queryData[metafield.name]" placeholder="{{ metafield.placeholder }}">
+                <select ng-if="metafield.type == 'text'" ui-select2="{ allowClear: true }" data-placeholder="{{ metafield.placeholder }}" ng-model="queryData[metafield.name]">
+                    <option></option>
+                    <option ng-repeat="option in optionsCache[metafield.name].values" value="{{ option }}">{{ option }}</option>
+                </select>
                 <input ng-if="metafield.type == 'number'" type="number" ng-model="queryData['min_'+metafield.name]" placeholder="{{ metafield.placeholder }} minimum">
                 <input ng-if="metafield.type == 'number'" type="number" ng-model="queryData['max_'+metafield.name]" placeholder="{{ metafield.placeholder }} maximum">
             </label>

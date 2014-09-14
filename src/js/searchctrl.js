@@ -1,10 +1,19 @@
 window.angular.module('matchboxarchive')
-.controller('searchctrl', ['$scope', '$interval', '$location', 'matchboxService', 'rolloutService', 'userService', 'CONFIG', function($scope, $interval, $location, matchboxService, rolloutService, userService, CONFIG) {
+.controller('searchctrl', ['$scope', '$interval', '$location', 'matchboxService', 'valuesService', 'rolloutService', 'userService', 'CONFIG', function($scope, $interval, $location, matchboxService, valuesService, rolloutService, userService, CONFIG) {
     $scope.results = [];
     $scope.page = 0;
     $scope.hasMore = true;
     $scope.isLoading = false;
     $scope.metafields = CONFIG.metafields;
+    $scope.optionsCache = {};
+
+    CONFIG.metafields.forEach(function(metafield) {
+        valuesService
+        .get(metafield.name)
+        .then(function(vals) {
+            $scope.optionsCache[metafield.name] = vals;
+        });
+    });
 
     $scope.isLoggedIn = function() {
         return userService.isLoggedIn;

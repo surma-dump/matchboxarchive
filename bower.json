@@ -14,7 +14,8 @@
     "angular-route": "~1.2.16",
     "lodash": "~2.4.1",
     "angular": "~1.2.16",
-    "blueimp-canvas-to-blob": "~2.1.0"
+    "blueimp-canvas-to-blob": "~2.1.0",
+    "angular-ui-select2": "~0.0.5"
   },
   "devDependencies": {
     "bind-polyfill": "*",

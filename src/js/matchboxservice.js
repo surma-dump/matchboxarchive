@@ -1,4 +1,4 @@
-window.angular.module('matchboxarchive')
+angular.module('matchboxarchive')
 .factory('matchboxService', ['$http', '$q', 'helper', function($http, $q, helper) {
     return {
         save: function(doc) {
