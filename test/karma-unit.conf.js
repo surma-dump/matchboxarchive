@@ -12,8 +12,12 @@ module.exports = function(config) {
 
     files : [
       'bower_components/lodash/dist/lodash.js',
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/select2/select2.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-route/angular-route.js',
+      'bower_components/select2/select2.js',
+      'bower_components/angular-ui-select2/src/select2.js',
       'bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js',
 
       'bower_components/angular-mocks/angular-mocks.js',
@@ -25,6 +29,7 @@ module.exports = function(config) {
       'src/js/userservice.js',
       'src/js/rolloutservice.js',
       'src/js/matchboxservice.js',
+      'src/js/valuesservice.js',
       'src/js/detailsctrl.js',
       'src/js/loginctrl.js',
       'src/js/metadatactrl.js',
