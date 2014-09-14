@@ -1,5 +1,5 @@
 <label class="image" ng-repeat="img in doc.images">
-	<img ng-src="/bucket/{{img.id}}.thumb.png" class="thumb">
+	<a href="/bucket/{{img.id}}" target="_blank"><img ng-src="/bucket/{{img.id}}.thumb.png" class="thumb"></a>
 </label>
 <label ng-repeat="metafield in metafields">
 	{{metafield.placeholder}}: {{doc.metadata[metafield.name]}}

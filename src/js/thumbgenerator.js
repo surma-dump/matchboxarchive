@@ -9,10 +9,18 @@ window.angular.module('matchboxarchive')
     var resizeImage = function(img, opts) {
         var cnv = document.createElement('canvas');
         var ctx = cnv.getContext('2d');
-        cnv.width = opts.maxWidth;
-        cnv.height = opts.maxHeight;
+        var dstRatio = opts.maxWidth / opts.maxHeight;
+        var srcRatio = img.width / img.height;
 
-        ctx.drawImage(img, 0, 0, opts.maxWidth, opts.maxHeight);
+        if(srcRatio > dstRatio) {
+            cnv.width = opts.maxWidth
+            cnv.height = opts.maxWidth / srcRatio;
+        } else {
+            cnv.height = opts.maxHeight;
+            cnv.width = opts.maxHeight * srcRatio;
+        }
+
+        ctx.drawImage(img, 0, 0, cnv.width, cnv.height);
 
         var deferred = $q.defer();
         cnv.toBlob(function(blob) {
