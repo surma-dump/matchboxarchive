@@ -12,41 +12,62 @@ window.angular.module('matchboxarchive')
             })
             .then(helper.httpPromiseResolver)
             .then(function(data) {
-                var deferred = $q.defer();
                 if(data.data.length <= 0) {
                     return null;
                 }
+
+                var deferred = $q.defer();
                 deferred.resolve(data.data[0]);
                 cache[field] = deferred.promise;
                 return deferred.promise;
             });
         },
         add: function(field, value) {
+            var p = cache[field];
             if(!cache[field]) {
-                cache[field] = [];
+                p = this.get(field);
             }
-            cache[field].push(value)
-            cache[field] = _(cache[field]).uniq();
-            return $http({
-                url: '/values/'+cache[field].id,
-                method: 'PUT',
-                data: cache[field],
-                headers: {
-                    'Content-Type': 'application/json'
+            return p.then(function(doc) {
+                if(!doc) {
+                    return $http({
+                        url: '/values',
+                        method: 'POST',
+                        data: {
+                            name: field,
+                            values: [value]
+                        },
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(helper.httpPromiseResolver)
+                    .then(function(doc) {
+                        var deferred = $q.defer();
+                        deferred.resolve(doc);
+                        cache[field] = deferred.promise;
+                        return deferred.promise
+                    });
                 }
-            }).then(helper.httpPromiseResolver);
+
+                doc.values.push(value);
+                doc.values = _(doc.values).uniq().value();
+
+                var deferred = $q.defer();
+                deferred.resolve(doc);
+                cache[field] = deferred.promise;
+
+                return $http({
+                    url: '/values/'+doc.id,
+                    method: 'PUT',
+                    data: doc,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(helper.httpPromiseResolver);
+            });
         },
-        delete: function(id) {
-            return $http({
-                url: '/matchboxes/'+id,
-                method: 'DELETE',
-            }).then(helper.httpPromiseResolver);
-        },
-        query: function(qry) {
-            return $http({
-                url: '/matchboxes?'+JSON.stringify(qry),
-                method: 'GET',
-            }).then(helper.httpPromiseResolver);
-        },
+        resetCache: function() {
+            cache = {};
+        }
     };
 }]);

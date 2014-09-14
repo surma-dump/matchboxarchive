@@ -1,5 +1,5 @@
 window.angular.module('matchboxarchive')
-.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'rolloutService', 'thumbGenerator', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, rolloutService, thumbGenerator, CONFIG){
+.controller('metadatactrl', ['$scope', '$location', '$routeParams', '$q', 'userService', 'matchboxService', 'valuesService', 'rolloutService', 'thumbGenerator', 'CONFIG', function($scope, $location, $routeParams, $q, userService, matchboxService, valuesService, rolloutService, thumbGenerator, CONFIG){
     userService.refreshState().then(function(isLoggedIn) {
         if(!isLoggedIn) {
             $location.path('/login');
@@ -90,6 +90,9 @@ window.angular.module('matchboxarchive')
     };
 
     $scope.save = function(doc) {
+        for(var key in doc.metadata) {
+            valuesService.add(key, doc.metadata[key]);
+        }
         matchboxService.save(doc).then(function(data) {
             $scope.msg = {
                 type: 'success',
