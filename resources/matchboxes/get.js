@@ -1,3 +1,3 @@
-if(!me) {
-    hide('privateMeta');
+if (!me) {
+  hide('privateMeta');
 }

@@ -3,12 +3,12 @@ window.angular.module('matchboxarchive')
     rolloutService.rollOut();
     $scope.location = $location;
     $scope.isLoggedIn = function() {
-        return userService.isLoggedIn;
+      return userService.isLoggedIn;
     };
     $scope.login = function() {
-        userService.login($scope.username, $scope.password);
+      userService.login($scope.username, $scope.password);
     };
     $scope.logout = function() {
-        userService.logout();
+      userService.logout();
     };
-}]);
+  }]);

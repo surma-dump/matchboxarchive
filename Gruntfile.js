@@ -29,9 +29,9 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
-            'bower_components/select2/select2.css',
-            '.tmp/compass/css/*',
-            'src/css/*'
+          'bower_components/select2/select2.css',
+          '.tmp/compass/css/*',
+          'src/css/*'
         ],
         dest: '.tmp/concat/css/style.css'
       }

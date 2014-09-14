@@ -10,7 +10,7 @@ module.exports = function(config) {
     singleRun: true,
     colors: true,
 
-    files : [
+    files: [
       'bower_components/lodash/dist/lodash.js',
       'bower_components/jquery/dist/jquery.js',
       'bower_components/select2/select2.js',
