@@ -6,8 +6,18 @@ window.angular.module('matchboxarchive')
     $scope.isLoading = false;
     $scope.metafields = CONFIG.metafields;
     $scope.optionsCache = {};
+    $scope.query = {
+      'visible': true,
+    };
+    $scope.queryData = {};
 
     CONFIG.metafields.forEach(function(metafield) {
+      switch(metafield.type) {
+        case "range":
+          $scope.queryData['min_'+metafield.name] = metafield.minimum;
+          $scope.queryData['max_'+metafield.name] = metafield.maximum;
+          break;
+      }
       valuesService
       .get(metafield.name)
       .then(function(vals) {
@@ -17,10 +27,6 @@ window.angular.module('matchboxarchive')
 
     $scope.isLoggedIn = function() {
       return userService.isLoggedIn;
-    };
-
-    $scope.query = {
-      'visible': true,
     };
 
     $interval(function poll() {
@@ -46,7 +52,6 @@ window.angular.module('matchboxarchive')
       }
     }, CONFIG.infiniteScrollPoll);
 
-    $scope.queryData = {};
 
     function queryGenerator(queryData) {
       var query = {};

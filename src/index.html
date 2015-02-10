@@ -21,8 +21,7 @@
                     <option></option>
                     <option ng-repeat="option in optionsCache[metafield.name].values" value="{{ option }}">{{ option }}</option>
                 </select>
-                <input ng-if="metafield.type == 'number'" type="number" ng-model="queryData['min_'+metafield.name]" placeholder="{{ metafield.placeholder }} minimum">
-                <input ng-if="metafield.type == 'number'" type="number" ng-model="queryData['max_'+metafield.name]" placeholder="{{ metafield.placeholder }} maximum">
+                <div ng-if="metafield.type == 'range'" slider start="{{ metafield.minimum }}" end="{{ metafield.maximum }}" ng-from="queryData['min_'+metafield.name]" ng-to="queryData['max_'+metafield.name]" step="{{ metafield.step }}"></div>
             </label>
             <button ng-click="newSearch()">Search</button>
         </div>

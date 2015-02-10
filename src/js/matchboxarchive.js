@@ -1,4 +1,4 @@
-window.angular.module('matchboxarchive', ['ngRoute', 'ui.select2'])
+window.angular.module('matchboxarchive', ['ngRoute', 'ui.select2', 'nouislider'])
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider
     .when('/', {
@@ -31,38 +31,33 @@ window.angular.module('matchboxarchive', ['ngRoute', 'ui.select2'])
   thumbSize: 150,
   metafields: [
     {
-      name: "country",
-      type: "text",
-      placeholder: "Country",
-    },
-    {
       name: "year",
-      type: "number",
+      type: "range",
       placeholder: "Year",
       minimum: 1200,
       step: 1,
       maximum: 2100,
     },
-    {
-      name: "width",
-      type: "number",
-      placeholder: "Width",
-      minimum: 0,
-      step: 0.1
-    },
-    {
-      name: "height",
-      type: "number",
-      placeholder: "Height",
-      minimum: 0,
-      step: 0.1
-    },
-    {
-      name: "depth",
-      type: "number",
-      placeholder: "Depth",
-      minimum: 0,
-      step: 0.1
-    }
+    // {
+    //   name: "width",
+    //   type: "number",
+    //   placeholder: "Width",
+    //   minimum: 0,
+    //   step: 0.1
+    // },
+    // {
+    //   name: "height",
+    //   type: "number",
+    //   placeholder: "Height",
+    //   minimum: 0,
+    //   step: 0.1
+    // },
+    // {
+    //   name: "depth",
+    //   type: "number",
+    //   placeholder: "Depth",
+    //   minimum: 0,
+    //   step: 0.1
+    // }
   ]
 });

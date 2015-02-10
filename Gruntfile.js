@@ -9,7 +9,10 @@ module.exports = function(grunt) {
           'bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js',
           'bower_components/jquery/dist/jquery.js',
           'bower_components/select2/select2.js',
+          'bower_components/nouislider/jquery.nouislider.js',
+          'bower_components/nouislider/Link.js',
           'bower_components/angular/angular.js',
+          'bower_components/angular-nouislider/src/nouislider.js',
           'bower_components/angular-route/angular-route.js',
           'bower_components/select2/select2.js',
           'bower_components/angular-ui-select2/src/select2.js',
@@ -30,6 +33,7 @@ module.exports = function(grunt) {
       css: {
         src: [
           'bower_components/select2/select2.css',
+          'bower_components/nouislider/jquery.nouislider.css',
           '.tmp/compass/css/*',
           'src/css/*'
         ],
