@@ -16,13 +16,19 @@
             <label ng-show="isLoggedIn()">
                 <input type="checkbox" ng-model="queryData.showHidden">Show hidden
             </label>
-            <label ng-repeat="metafield in metafields">
+            <div ng-repeat="metafield in metafields" ng-class="['search', metafield.type, metafield.name]">
                 <select ng-if="metafield.type == 'text'" ui-select2="{ allowClear: true }" data-placeholder="{{ metafield.placeholder }}" ng-model="queryData[metafield.name]">
                     <option></option>
                     <option ng-repeat="option in optionsCache[metafield.name].values" value="{{ option }}">{{ option }}</option>
                 </select>
                 <div ng-if="metafield.type == 'range'" slider start="{{ metafield.minimum }}" end="{{ metafield.maximum }}" ng-from="queryData['min_'+metafield.name]" ng-to="queryData['max_'+metafield.name]" step="{{ metafield.step }}"></div>
-            </label>
+                <div ng-if="metafield.type == 'feature'">
+                  <label ng-repeat="feature in metafield.features">
+                    <input type="radio" name="{{ metafield.name }}" value="{{ feature }}">
+                    <span data-feature="{{ feature }}"></span>
+                  </label>
+                </div>
+            </div>
             <button ng-click="newSearch()">Search</button>
         </div>
         <div id="result">

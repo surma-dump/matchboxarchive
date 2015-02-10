@@ -151,3 +151,24 @@ label.image {
 .transparent {
 	@include opacity(0.5);
 }
+
+.search.feature {
+	input[type="radio"] {
+		display: none;
+		& + span {
+			color: white;
+		}
+		&:checked + span {
+			color: red;
+		}
+	}
+}
+
+.search.shape {
+	label {
+		display: inline-block;
+		input[type="radio"] + span:after {
+			content: attr(data-feature);
+		}
+	}
+}
