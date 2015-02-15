@@ -152,23 +152,35 @@ label.image {
 	@include opacity(0.5);
 }
 
-.search.feature {
-	input[type="radio"] {
-		display: none;
-		& + span {
-			color: white;
-		}
-		&:checked + span {
-			color: red;
-		}
-	}
-}
-
 .search.shape {
 	label {
 		display: inline-block;
-		input[type="radio"] + span:after {
-			content: attr(data-feature);
+		input[type="radio"] {
+			display: none;
+			+ span {
+				display: inline-block;
+				background-image: url('../images/shapes.png');
+				width: 37px;
+				height: 37px;
+				&:hover {
+					background-position-y: -37px;
+				}
+				&[data-feature="landscape"] {
+					background-position-x: -37px*0;
+				}
+				&[data-feature="portrait"] {
+					background-position-x: -37px*1;
+				}
+				&[data-feature="square"] {
+					background-position-x: -37px*2;
+				}
+				&[data-feature="round"] {
+					background-position-x: -37px*3;
+				}
+			}
+			&:checked + span {
+				background-position-y: -74px;
+			}
 		}
 	}
 }

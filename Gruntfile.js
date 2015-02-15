@@ -100,6 +100,16 @@ module.exports = function(grunt) {
           }
         ]
       },
+      images: {
+        files: [
+          {
+            expand: true,
+            cwd: 'src',
+            src: 'images/**',
+            dest: 'public/'
+          }
+        ]
+      },
       tmpjs: {
         files: [
           {
@@ -165,8 +175,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('build', ['compass:compressed', 'concat', 'uglify', 'cssmin', 'copy:html', 'copy:css', 'copy:js']);
-  grunt.registerTask('dev-build', ['compass:dev', 'concat', 'copy:html', 'copy:tmpcss', 'copy:tmpjs']);
+  grunt.registerTask('build', ['compass:compressed', 'concat', 'uglify', 'cssmin', 'copy:html', 'copy:css', 'copy:js', 'copy:images']);
+  grunt.registerTask('dev-build', ['compass:dev', 'concat', 'copy:html', 'copy:tmpcss', 'copy:tmpjs', 'copy:images']);
   grunt.registerTask('server', ['dev-build', 'watch']);
   grunt.registerTask('heroku', ['build']);
   grunt.registerTask('default', ['build']);

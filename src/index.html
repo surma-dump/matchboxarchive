@@ -25,7 +25,7 @@
                 <div ng-if="metafield.type == 'feature'">
                   <label ng-repeat="feature in metafield.features">
                     <input type="radio" name="{{ metafield.name }}" value="{{ feature }}">
-                    <span data-feature="{{ feature }}"></span>
+                    <span data-feature="{{ feature }}" data-index="{{ $index }}"></span>
                   </label>
                 </div>
             </div>
