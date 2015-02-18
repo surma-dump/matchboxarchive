@@ -21,8 +21,12 @@
                     <option></option>
                     <option ng-repeat="option in optionsCache[metafield.name].values" value="{{ option }}">{{ option }}</option>
                 </select>
-                <div ng-if="metafield.type == 'range'" slider start="{{ metafield.minimum }}" end="{{ metafield.maximum }}" ng-from="queryData['min_'+metafield.name]" ng-to="queryData['max_'+metafield.name]" step="{{ metafield.step }}"></div>
+                <div ng-if="metafield.type == 'range'">
+                  <div slider start="{{ metafield.minimum }}" end="{{ metafield.maximum }}" ng-from="queryData['min_'+metafield.name]" ng-to="queryData['max_'+metafield.name]" step="{{ metafield.step }}"></div>
+                  <label>{{ queryData['min_'+metafield.name] }}-{{ queryData['max_'+metafield.name] }}</label>
+                </div>
                 <div ng-if="metafield.type == 'feature'">
+                  {{ metafield.title }}
                   <label ng-repeat="feature in metafield.features">
                     <input type="radio" name="{{ metafield.name }}" value="{{ feature }}">
                     <span data-feature="{{ feature }}" data-index="{{ $index }}"></span>

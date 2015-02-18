@@ -31,19 +31,25 @@ window.angular.module('matchboxarchive', ['ngRoute', 'ui.select2', 'nouislider']
   thumbSize: 150,
   metafields: [
     {
-      name: "year",
-      type: "range",
-      title: "Year",
-      minimum: 1200,
-      step: 1,
-      maximum: 2100
-    },
-    {
       name: "shape",
       type: "feature",
       title: "Shape",
       features: ["landscape", "portrait", "square", "round"]
-    }
+    },
+    {
+      name: "year",
+      type: "range",
+      title: "Year",
+      minimum: 1200,
+      step: 50,
+      maximum: 2100
+    },
+    {
+      name: "color",
+      type: "feature",
+      title: "Colored",
+      features: ["plain", "two", "three", "multi"]
+    },
     // {
     //   name: "width",
     //   type: "number",
