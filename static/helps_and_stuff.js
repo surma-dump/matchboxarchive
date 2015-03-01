@@ -8,3 +8,14 @@ http://angular-ui.github.io/bootstrap/#/getting_started
 https://docs.angularjs.org/tutorial/step_07
 https://docs.angularjs.org/api/ng/directive/ngStyle
 */
+
+
+/* CHECK next time : 
+* alle drei flex boxen 
+* feste höhe 100% 
+* rechts mit position: right 
+* drinnen nochmal n div mit overflow hidden
+* animiere width des rechten side panels 
+-> damit die überdeckung nicht da ist, sondern search result kleiner geschoben wird
+
+*/
