@@ -41,14 +41,12 @@ func main() {
 			httptools.SilentHandler(http.HandlerFunc(queryDatabase)),
 			http.HandlerFunc(jsonify),
 		},
-		"/fields/?": httptools.L{
-			httptools.SilentHandler(http.HandlerFunc(generateFieldSearchQuery)),
-			httptools.SilentHandler(http.HandlerFunc(queryDatabase)),
+		"/field/?": httptools.L{
+			httptools.SilentHandler(http.HandlerFunc(listFields)),
 			http.HandlerFunc(jsonify),
 		},
-		"/fields/([_a-z]+)": httptools.L{
-			httptools.SilentHandler(http.HandlerFunc(generateFieldIdQuery)),
-			httptools.SilentHandler(http.HandlerFunc(queryDatabase)),
+		"/field/([_a-z]+)": httptools.L{
+			httptools.SilentHandler(http.HandlerFunc(showField)),
 			http.HandlerFunc(jsonify),
 		},
 		"/login/?": httptools.L{

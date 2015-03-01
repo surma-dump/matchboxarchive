@@ -87,18 +87,52 @@ func generateMatchboxIdQuery(w http.ResponseWriter, r *http.Request) {
 	qry["_id"] = bson.ObjectIdHex(strid)
 }
 
-func generateFieldSearchQuery(w http.ResponseWriter, r *http.Request) {
-
+func listFields(w http.ResponseWriter, r *http.Request) {
+	vw := w.(httptools.VarsResponseWriter)
+	vw.Vars()["results"] = []interface{}{Fields}
 }
 
-func generateFieldIdQuery(w http.ResponseWriter, r *http.Request) {
+func showField(w http.ResponseWriter, r *http.Request) {
+	vw := w.(httptools.VarsResponseWriter)
+	qry := bson.M{}
+	vw.Vars()["query"] = qry
 
+	fieldname := vw.Vars()["1"].(string)
+	fields := Fields.Where(func(f Field) bool { return f.Name == fieldname })
+	if len(fields) > 1 {
+		LogError(w, http.StatusInternalServerError, "Duplicate fieldname: %s", fieldname)
+		return
+	}
+	if len(fields) == 0 {
+		LogError(w, http.StatusNotFound, "Unknown fieldname: %s", fieldname)
+		return
+	}
+
+	field := fields[0]
+
+	var values []interface{}
+	err := options.MongoDB.C("matchbox").Find(bson.M{}).Distinct(field.Name, &values)
+	if err != nil {
+		LogError(w, http.StatusInternalServerError, "Could not aggregate field values for %s: %s", fieldname, err)
+		return
+	}
+
+	vw.Vars()["results"] = []interface{}{
+		bson.M{
+			"name":   field.Name,
+			"type":   field.Type,
+			"values": values,
+		},
+	}
 }
 
 func queryDatabase(w http.ResponseWriter, r *http.Request) {
 	vw := w.(httptools.VarsResponseWriter)
 
-	query := vw.Vars()["query"]
+	query, ok := vw.Vars()["query"]
+	if !ok {
+		return
+	}
 	limit, hasLimit := vw.Vars()["limit"]
 	skip, hasSkip := vw.Vars()["skip"]
 
