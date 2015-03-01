@@ -69,6 +69,14 @@ func main() {
 			"/matchbox/([0-9a-f]+)": httptools.MethodSwitch{
 				"PUT": http.HandlerFunc(updateMatchbox),
 			},
+			"/image/?": httptools.MethodSwitch{
+				"POST": httptools.L{
+					httptools.SilentHandler(http.HandlerFunc(injectBucket)),
+					httptools.SilentHandler(http.HandlerFunc(processImage)),
+					httptools.SilentHandler(http.HandlerFunc(uploadImages)),
+					http.HandlerFunc(jsonify),
+				},
+			},
 		}),
 	}
 
