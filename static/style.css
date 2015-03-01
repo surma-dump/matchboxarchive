@@ -18,53 +18,16 @@
     height: 100%;
     width: 100px; 
     background: #ccc;
+
+    transition: transform 1s ease-in-out 0s;
 }
-
-
-
-/*.search_container{
-	background: #ccc;
-	float :left;
-	width: 200px;
-	height: 100%;
-}
-
-.result_container{
-
-}
-
-.details_container{
-	top: 20px;
-	left: 0px;
-	width: 100px;
-	height: 400px;
-	background: #ccc;
-}*/
 
 
 .slideIn{
-	-webkit-transition: right 10s ease-in-out 0s; 
-    -moz-transition: right 10s ease-in-out 0s;
-    -o-transition: right 10s ease-in-out 0s;
-    transition: right 10s ease-in-out 0s;
-    
-    -webkit-transform: translate(100px,0) ;
-    -moz-transform:  translate(100px,0) ;
-    -o-transform:  translate(100px,0) ;
-    transform:  translate(100px,0) ;
-    
+    transform:  translate(100px,0) ;   
 }
 
-.slideOut{
-	-webkit-transition: right 10s ease-in-out 0s; 
-    -moz-transition: right 10s ease-in-out 0s;
-    -o-transition: right 10s ease-in-out 0s;
-    transition: right 10s ease-in-out 0s;
-    
-    -webkit-transform: translate(0px,0) ;
-    -moz-transform:  translate(0px,0) ;
-    -o-transform:  translate(0px,0) ;
+.slideOut{    
     transform:  translate(0px,0) ;
-    
 }
 
