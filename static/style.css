@@ -43,23 +43,23 @@
 
 
 .slideIn{
-	-webkit-transition: all 1s ease-in-out 0s; / *  this is so all properties animate * /
-    -moz-transition: all 1s ease-in-out 0s;
-    -o-transition: all 1s ease-in-out 0s;
-    transition: all 1s ease-in-out 0s;
+	-webkit-transition: right 10s ease-in-out 0s; 
+    -moz-transition: right 10s ease-in-out 0s;
+    -o-transition: right 10s ease-in-out 0s;
+    transition: right 10s ease-in-out 0s;
     
-    -webkit-transform: translate(-250px,0) ;
-    -moz-transform:  translate(-250px,0) ;
-    -o-transform:  translate(-250px,0) ;
-    transform:  translate(-250px,0) ;
+    -webkit-transform: translate(100px,0) ;
+    -moz-transform:  translate(100px,0) ;
+    -o-transform:  translate(100px,0) ;
+    transform:  translate(100px,0) ;
     
 }
 
 .slideOut{
-	-webkit-transition: all 1s ease-in-out 0s; / *  this is so all properties animate * /
-    -moz-transition: all 1s ease-in-out 0s;
-    -o-transition: all 1s ease-in-out 0s;
-    transition: all 1s ease-in-out 0s;
+	-webkit-transition: right 10s ease-in-out 0s; 
+    -moz-transition: right 10s ease-in-out 0s;
+    -o-transition: right 10s ease-in-out 0s;
+    transition: right 10s ease-in-out 0s;
     
     -webkit-transform: translate(0px,0) ;
     -moz-transform:  translate(0px,0) ;

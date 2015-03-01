@@ -9,8 +9,13 @@
   </head>
   <body ng-controller="ButtonsCtrl">
     <div class="search_container">1</div>
-    <div class="result_container">2</div>
-    <div class="details_container">3</div>
+     
+    <div class="result_container">2
+       <button type="button" class="btn btn-primary" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-click="openDetails()">
+        Test Image
+      </button>
+    </div>
+    <div  ng-class="{ details_container : true, slideIn : in, slideOut : !in}">3</div>
 
     <!--<div class="result_container" >
       <div class="search_container"></div>
