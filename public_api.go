@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"gopkg.in/amz.v1/s3"
 	"github.com/surma/httptools"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -190,12 +191,18 @@ func jsonify(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func createMatchbox(w http.ResponseWriter, r *http.Request) {
+func redirectToImage(w http.ResponseWriter, r *http.Request) {
+	vw := w.(httptools.VarsResponseWriter)
+	key := vw.Vars()["1"].(string)
+	bucket := vw.Vars()["bucket"].(*s3.Bucket)
 
+	surl := bucket.URL(key)
+	http.Redirect(w, r, surl, http.StatusMovedPermanently)
 }
 
-func updateMatchbox(w http.ResponseWriter, r *http.Request) {
-
+func injectBucket(w http.ResponseWriter, r *http.Request) {
+	vw := w.(httptools.VarsResponseWriter)
+	vw.Vars()["bucket"] = options.ImageBucket.Bucket(options.S3Credentials.Auth())
 }
 
 func LogError(w http.ResponseWriter, code int, msgfmt string, params ...interface{}) {

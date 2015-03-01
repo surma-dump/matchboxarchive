@@ -11,10 +11,12 @@ import (
 
 var (
 	options = struct {
-		Listen   string        `goptions:"-l, --listen, description='Address to bind to'"`
-		MongoDB  *MongoDB      `goptions:"-m, --mongodb, description='Address of MongoDB server', obligatory"`
-		Password string        `goptions:"-p, --password, description='Password for protected API'"`
-		Help     goptions.Help `goptions:"-h, --help, description='Show this help'"`
+		Listen        string         `goptions:"-l, --listen, description='Address to bind to'"`
+		MongoDB       *MongoDB       `goptions:"-m, --mongodb, description='Address of MongoDB server', obligatory"`
+		Password      string         `goptions:"-p, --password, description='Password for protected API'"`
+		S3Credentials *S3Credentials `goptions:"-s, --s3-credentials, description='Access key and secret key for API access (format: accessKey:secretKey)', obligatory"`
+		ImageBucket   *S3Bucket      `goptions:"-b, --s3-bucket, description='S3 Bucket to use for image storage (format: region:name)', obligatory"`
+		Help          goptions.Help  `goptions:"-h, --help, description='Show this help'"`
 	}{
 		Listen: "localhost:" + Getenv("PORT", "5000"),
 	}
@@ -51,6 +53,10 @@ func main() {
 		},
 		"/login/?": httptools.L{
 			http.HandlerFunc(login),
+		},
+		"/image/(.+)": httptools.L{
+			httptools.SilentHandler(http.HandlerFunc(injectBucket)),
+			http.HandlerFunc(redirectToImage),
 		},
 	})
 
